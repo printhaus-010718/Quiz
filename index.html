@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Science Wonder Quiz Bee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#eaf4ff;--bg2:#f4eeff;--card:#ffffff;--ink:#1c2547;--muted:#55638a;--line:#d3e0fb;
+  --blue:#3b6cf6;--purple:#7c4dff;--mint:#27d3a2;--yellow:#ffc533;--coral:#e8532f;--onbright:#14204a;
+  --ok:#0f7a58;--okbg:#d9f8ec;--bad:#b4233f;--badbg:#ffe3e8;--warn:#8a5a00;--warnbg:#fff1c7;
+  --shadow:0 6px 0 rgba(28,37,71,.10),0 14px 28px rgba(28,37,71,.10);
+  color-scheme:light;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1633;--bg2:#1a1242;--card:#19234a;--ink:#f1f4ff;--muted:#b3bfe4;--line:#2d3b6e;
+    --ok:#5cecb9;--okbg:#0f3a2f;--bad:#ff9db0;--badbg:#4a1a28;--warn:#ffd36b;--warnbg:#4a3a0c;
+    --shadow:0 6px 0 rgba(0,0,0,.35),0 14px 28px rgba(0,0,0,.3);color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1633;--bg2:#1a1242;--card:#19234a;--ink:#f1f4ff;--muted:#b3bfe4;--line:#2d3b6e;
+  --ok:#5cecb9;--okbg:#0f3a2f;--bad:#ff9db0;--badbg:#4a1a28;--warn:#ffd36b;--warnbg:#4a3a0c;
+  --shadow:0 6px 0 rgba(0,0,0,.35),0 14px 28px rgba(0,0,0,.3);color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--ink);background:linear-gradient(160deg,var(--bg),var(--bg2));
+  font-family:"Fredoka","Trebuchet MS",system-ui,"Segoe UI",Roboto,sans-serif;font-size:18px;line-height:1.45}
+h1,h2,h3{margin:.2em 0 .4em;line-height:1.15}
+h1{font-size:clamp(1.8rem,5vw,2.8rem)} h2{font-size:1.4rem} h3{font-size:1.15rem}
+p{margin:.4em 0}
+.wrap{max-width:980px;margin:0 auto;padding:18px 16px 60px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.small{font-size:.9rem;color:var(--muted)}
+:focus-visible{outline:4px solid var(--yellow);outline-offset:2px;box-shadow:0 0 0 7px var(--onbright)}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{min-height:56px;border:0;border-radius:20px;padding:12px 22px;font-weight:600;font-size:1.1rem;cursor:pointer;color:#fff;
+  background:var(--blue);box-shadow:0 5px 0 rgba(0,0,0,.22);transition:transform .1s,box-shadow .1s;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-align:center}
+.btn:active{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.22)}
+.btn.purple{background:var(--purple)} .btn.coral{background:var(--coral)}
+.btn.mint{background:var(--mint);color:var(--onbright)} .btn.yellow{background:var(--yellow);color:var(--onbright)}
+.btn.ghost{background:var(--card);color:var(--ink);border:3px solid var(--line);box-shadow:none}
+.btn.sm{min-height:48px;padding:8px 16px;font-size:1rem;border-radius:16px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+.card{background:var(--card);border-radius:26px;padding:18px 20px;box-shadow:var(--shadow);margin:16px 0}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.row.center{justify-content:center}
+.grid{display:grid;gap:14px}
+.grid.c2{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.grid.c3{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 12px;font-size:.9rem;font-weight:600;background:var(--line);color:var(--ink)}
+.chip.lv-easy{background:var(--mint);color:var(--onbright)} .chip.lv-hard{background:var(--yellow);color:var(--onbright)}
+.chip.lv-advanced{background:var(--purple);color:#fff}
+input[type=text],select,textarea{width:100%;min-height:52px;border-radius:16px;border:3px solid var(--line);background:var(--card);padding:10px 14px}
+label{font-weight:600;display:block;margin:8px 0 4px}
+.hero{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-top:6px}
+.mascot{width:150px;flex:none}
+.bubble{flex:1;min-width:240px;background:var(--card);border-radius:28px;padding:16px 22px;box-shadow:var(--shadow);position:relative}
+.robot{width:100%;height:auto;animation:bob 3s ease-in-out infinite}
+.robot .mouth{transform-origin:60px 63px}
+.speaking .robot .mouth{animation:talk .28s ease-in-out infinite alternate}
+.listening .robot .ear{fill:var(--yellow);animation:pulse 1s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-6px)}}
+@keyframes talk{to{transform:scaleY(2.6)}}
+@keyframes pulse{50%{opacity:.45}}
+.levels button{all:unset;box-sizing:border-box;cursor:pointer;display:block;width:100%;background:var(--card);border:4px solid var(--line);border-radius:24px;padding:14px 16px;box-shadow:var(--shadow);min-height:56px}
+.levels button[aria-checked=true]{border-color:var(--blue);background:var(--card);outline:3px solid var(--yellow)}
+.levels .tick{float:right;font-weight:700;color:var(--ok)}
+.levels b{font-size:1.2rem}
+.tiles .btn{flex:1 1 200px}
+.banner{border-radius:18px;padding:10px 16px;margin:10px 0;font-weight:500}
+.banner.warn{background:var(--warnbg);color:var(--warn)} .banner.bad{background:var(--badbg);color:var(--bad)} .banner.ok{background:var(--okbg);color:var(--ok)}
+/* quiz */
+.qtop{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.bar{height:16px;border-radius:99px;background:var(--line);overflow:hidden;margin:10px 0 2px}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--mint),var(--blue));border-radius:99px;transition:width .4s}
+.stage{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:start}
+.qcard{background:var(--card);border-radius:26px;padding:18px 20px;box-shadow:var(--shadow);position:relative;min-height:170px}
+.qcard h2{font-size:clamp(1.3rem,3.6vw,2rem);margin-right:96px}
+.hostsay{background:var(--card);border-radius:20px;padding:10px 14px;margin-top:8px;font-size:.95rem;color:var(--muted);box-shadow:var(--shadow)}
+.timer{position:absolute;right:14px;top:14px;width:84px;height:84px}
+.timer svg{width:100%;height:100%;transform:rotate(-90deg)}
+.timer circle{fill:none;stroke-width:9}
+.timer .bg{stroke:var(--line)} .timer .fg{stroke:var(--blue);stroke-linecap:round;stroke-dasharray:283;transition:stroke-dashoffset .12s linear}
+.timer.low .fg{stroke:var(--coral)}
+.timer span{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;font-size:1.5rem}
+.micarea{text-align:center;margin-top:12px}
+.mic{width:120px;height:120px;border-radius:50%;border:0;background:var(--purple);color:#fff;font-size:3rem;cursor:pointer;box-shadow:0 8px 0 rgba(0,0,0,.22);position:relative}
+.mic.listening{background:var(--coral);animation:ring 1.2s ease-out infinite}
+.mic.busy{background:var(--muted);cursor:default}
+@keyframes ring{0%{box-shadow:0 8px 0 rgba(0,0,0,.22),0 0 0 0 rgba(232,83,47,.55)}100%{box-shadow:0 8px 0 rgba(0,0,0,.22),0 0 0 28px rgba(232,83,47,0)}}
+.miclabel{font-weight:600;font-size:1.2rem;margin-top:8px;min-height:1.6em}
+.heard{min-height:1.6em;color:var(--muted);font-style:italic}
+.fb{border-radius:24px;padding:16px 20px;margin:14px 0;font-weight:500;display:flex;gap:14px;align-items:flex-start}
+.fb.ok{background:var(--okbg);color:var(--ok)} .fb.bad{background:var(--badbg);color:var(--bad)} .fb.time{background:var(--warnbg);color:var(--warn)}
+.fb .ic{font-size:2rem;line-height:1} .fb b{display:block;font-size:1.25rem}
+.fb .ans{color:var(--ink);font-weight:500}
+.pop{animation:pop .5s ease}
+@keyframes pop{40%{transform:scale(1.18)}}
+.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.typebox{display:flex;gap:10px;max-width:560px;margin:10px auto 0}
+.typebox input{flex:1}
+.stat{background:var(--card);border-radius:22px;padding:14px;text-align:center;box-shadow:var(--shadow)}
+.stat b{display:block;font-size:2rem}
+.badges{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.badge{background:var(--card);border-radius:22px;padding:12px;text-align:center;border:3px solid var(--line)}
+.badge.on{border-color:var(--yellow)} .badge.off{opacity:.55}
+.badge .em{font-size:2.4rem}
+.tbar{height:14px;border-radius:99px;background:var(--line);overflow:hidden} .tbar>i{display:block;height:100%;background:var(--mint)}
+.item{border-left:8px solid var(--line);padding:10px 14px;margin:12px 0;background:var(--card);border-radius:0 20px 20px 0;box-shadow:var(--shadow)}
+.item.ok{border-color:var(--ok)} .item.bad{border-color:var(--bad)}
+table{width:100%;border-collapse:collapse;font-size:.95rem} td,th{padding:8px 6px;border-bottom:2px solid var(--line);text-align:left}
+input[type=range]{width:100%;height:36px}
+.switch{display:flex;align-items:center;gap:12px;min-height:48px}
+.switch input{width:28px;height:28px}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+@media (max-width:640px){
+  .stage{grid-template-columns:1fr}.stage .host{display:flex;gap:12px;align-items:center}.stage .host .mascot{width:90px}.stage .hostsay{flex:1;margin:0}
+  .mascot{width:110px} .mic{width:104px;height:104px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="live" class="sr" aria-live="polite"></div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<script>
+"use strict";
+/*PURE-START*/
+/* ===================== Topic map & levels ===================== */
+const CH={1:"Chapter 1: Matter in Daily Life",2:"Chapter 2: Simple Science Investigation",3:"Chapter 3: Human Body Systems",4:"Chapter 4: Groups of Living Things",5:"Chapter 5: Life Cycle of Living Things",6:"Chapter 6: Plant and Animal Adaptation",7:"Chapter 7: Force and Motion",8:"Chapter 8: Energy: Electricity",0:"Additional Related Topics"};
+const QN={1:"First Quarter: Materials",2:"Second Quarter: Living Things",3:"Third Quarter: Force, Motion, and Energy",4:"Additional Related Topics"};
+const TOPICS={
+  M:{n:"Matter and Its States",q:1,ch:1}, I:{n:"Science Investigation and Measurement",q:1,ch:2},
+  DG:{n:"Digestive System",q:2,ch:3}, R:{n:"Respiratory System",q:2,ch:3}, RP:{n:"Reproductive System",q:2,ch:3}, CV:{n:"Heart and Blood",q:2,ch:3},
+  G:{n:"Groups of Living Things",q:2,ch:4}, L:{n:"Life Cycles",q:2,ch:5}, AD:{n:"Plant and Animal Adaptation",q:2,ch:6},
+  F:{n:"Force and Motion",q:3,ch:7}, E:{n:"Electricity and Magnetism",q:3,ch:8},
+  EC:{n:"Ecosystems and Food Webs",q:4,ch:0}, EN:{n:"Energy and Photosynthesis",q:4,ch:0}
+};
+const LEVELS={
+  easy:{name:"Easy",title:"Little Scientist",secs:10,pts:1,emoji:"🧪"},
+  hard:{name:"Hard",title:"Science Explorer",secs:20,pts:3,emoji:"🔭"},
+  advanced:{name:"Advanced",title:"Science Genius",secs:30,pts:5,emoji:"🧠"}
+};
+
+/* ===================== Question bank =====================
+   [topic, question, answer, keys, options]
+   keys = list of groups; every group needs one matching alternative ("a|b" = synonyms, "word*" = prefix).
+   options: neg (allow negations), bad (phrases that make it wrong), need (min groups), count (min distinct concepts in group 0) */
+const EASY=[
+["M","What are the three common states of matter?","Solid, liquid, and gas",[["solid"],["liquid"],["gas"]]],
+["M","What state of matter has a definite shape and volume?","Solid",[["solid"]]],
+["I","What instrument measures temperature?","Thermometer",[["thermometer"]]],
+["M","What do we call the process when ice changes into water?","Melting",[["melt*"]]],
+["DG","What body system breaks down food into nutrients?","Digestive system",[["digest*"]]],
+["CV","What organ pumps blood throughout the body?","Heart",[["heart"]]],
+["R","What organs are mainly responsible for breathing?","Lungs",[["lung"]]],
+["R","What gas do humans need for respiration?","Oxygen",[["oxygen"]]],
+["G","What part of a plant absorbs water and minerals from the soil?","Roots",[["root"]]],
+["G","What do we call animals that eat both plants and other animals?","Omnivores",[["omnivor*"]]],
+["F","What force pulls objects toward Earth?","Gravity",[["gravity|gravitational"]]],
+["F","What force opposes motion between two surfaces in contact?","Friction",[["friction|frictional"]]],
+["E","What type of electricity builds up on an object’s surface?","Static electricity",[["static"]]],
+["E","What device is used to open or close an electric circuit?","Switch",[["switch"]]],
+["E","What are the two poles of a magnet?","North and south poles",[["north"],["south"]]],
+["M","What is the process of water changing into water vapor?","Evaporation",[["evaporat*"]]],
+["R","What is the main function of the respiratory system?","Gas exchange: taking in oxygen and removing carbon dioxide",[["oxygen|exchange|breath*|carbon dioxide|breathing"]]],
+["I","What is the standard metric unit of length?","Meter",[["meter|metre"]]],
+["G","What are animals without backbones called?","Invertebrates",[["invertebrate|in vertebrate"]]],
+["EN","What is the main source of energy for Earth?","The Sun",[["sun|sunlight|sunshine"]]],
+["M","I can flow and take the shape of my container, but I have a definite volume. What am I?","Liquid",[["liquid"]]],
+["M","When you place an ice cube under the sun, it becomes water. Is this a physical or chemical change?","Physical change",[["physical"]],{neg:1,bad:["not physical"]}],
+["M","Fill in the blank: Water freezes at approximately _____ degrees Celsius under normal atmospheric pressure.","0°C",[["0"]],{bad:["32","100"]}],
+["M","True or False: Air is considered matter even though we cannot see it.","True",[["true|yes|correct"]]],
+["I","Which laboratory tool is used to measure the mass of an object?","Balance",[["balance|scale"]]],
+["M","You accidentally spill water on the floor. After several hours, it disappears. What process occurred?","Evaporation",[["evaporat*"]]],
+["DG","Which organ produces bile to help digest fats?","Liver",[["liver"]]],
+["DG","Complete the sentence: The tube that carries food from the mouth to the stomach is called the _____.","Esophagus",[["esophagus|oesophagus|food pipe|gullet"]]],
+["R","True or False: Humans breathe in oxygen and breathe out only carbon dioxide.","False",[["false|incorrect|not true"]],{neg:1}],
+["RP","Which body system enables humans to produce offspring?","Reproductive system",[["reproduc*"]]],
+["L","A butterfly begins its life as an egg. What stage comes next?","Larva (caterpillar)",[["larva|larvae|caterpillar|lava"]]],
+["G","Is a mushroom classified as a plant, animal, or fungus?","Fungus",[["fung*"]]],
+["G","I am a small opening on a leaf that allows gases to enter and leave. What am I?","Stoma",[["stoma|stomata|stomate"]]],
+["G","What do you call an animal that eats only plants?","Herbivore",[["herbivor*"]]],
+["G","True or False: Fish use gills to obtain oxygen from water.","True",[["true|yes|correct"]]],
+["F","What force helps your shoes grip the ground while walking?","Friction",[["friction"]]],
+["F","A ball rolls down a hill without being pushed. What force primarily causes this?","Gravity",[["gravity|gravitational"]]],
+["E","What form of energy powers a flashlight when its batteries are connected properly?","Electrical energy",[["electric*"]]],
+["E","Fill in the blank: A material that allows electric current to flow easily is called a _____.","Conductor",[["conductor|conductive"]]],
+["E","What happens when opposite magnetic poles are brought close together?","They attract",[["attract*|pull*|stick*|come together"]]],
+["M","A glass filled with ice is placed in a warm room. What happens to the ice?","It melts.",[["melt*"]]],
+["L","A seed receives water, oxygen, and the right temperature. What may happen next?","It may germinate.",[["germinat*|sprout*|grow*"]]],
+["E","A magnet’s south pole is brought close to another magnet’s north pole. What happens?","They attract.",[["attract*|pull*|stick*|come together"]]],
+["F","A moving toy car enters a rough surface. What generally happens to its speed?","It decreases because of friction.",[["decreas*|slow*|reduc*|drop*|lower|less"]],{bad:["increas*","faster","speed up","speeds up","accelerat*"]}],
+["E","A battery, wires, switch, and bulb form a complete working circuit. The switch is closed. What happens?","The bulb lights up.",[["light*|lit|glow*|turn* on|shine*|bright*|illuminat*|work*"]]]
+];
+const HARD=[
+["M","What is the process called when water vapor changes into liquid water?","Condensation",[["condens*"]]],
+["M","What change of state occurs when a solid changes directly into a gas?","Sublimation",[["sublim*"]]],
+["M","Why do water droplets form on the outside of a cold glass?","Water vapor in the air condenses on the cold surface.",[["condens*|water vapor|water vapour|vapor|vapour|moisture|humidity"]]],
+["DG","What is the finger-like structure in the small intestine that increases the surface area for nutrient absorption?","Villi (singular: villus)",[["villi|villus|vili|vilus"]]],
+["R","What is the name of the tiny air sacs in the lungs where gas exchange takes place?","Alveoli",[["alveoli|alveolus|alveolar|alveola"]]],
+["CV","What blood vessels carry blood away from the heart?","Arteries",[["artery"]]],
+["RP","What type of reproduction involves only one parent?","Asexual reproduction",[["asexual|a sexual"]]],
+["L","What is the process of seed development into a young plant called?","Germination",[["germinat*"]]],
+["AD","What adaptation allows a chameleon to blend with its surroundings?","Camouflage through color change",[["camouflag*|camoufl*|camoflag*|color change|colour change|changing color|changing colour|changes color"]]],
+["AD","Why do cactus plants have spines instead of broad leaves?","To reduce water loss and help protect the plant",[["water loss|lose water|losing water|reduce water|save water|conserve water|protect*|prevent water|less water|predator*|retain water|keep water|store water|keeps water"]]],
+["F","What force slows a bicycle when its brakes are applied?","Friction",[["friction|frictional"]]],
+["F","What is the SI unit of force?","Newton (N)",[["newton"]]],
+["E","What is the difference between an open circuit and a closed circuit?","An open circuit has a broken path; a closed circuit has a complete path for current.",[["broken|break|gap|incomplete|not complete|not connected|no complete|not flow*|no current|stops|not work*|off"],["complete|connected|continuous|unbroken|flows|flow|works|working|full path"]],{neg:1}],
+["E","What happens when the north poles of two magnets are brought close together?","They repel each other.",[["repel*|repuls*|push away|pushes away|push each other|pushing"]]],
+["E","What type of electrical circuit has only one path for electric current?","Series circuit",[["series"]]],
+["I","What is the variable intentionally changed by a scientist during an experiment?","Independent variable",[["independent|manipulated"]]],
+["F","What is the main difference between mass and weight?","Mass is the amount of matter; weight is the force of gravity acting on that mass.",[["matter|amount of"],["gravity|force|pull"]]],
+["AD","Why do many birds have hollow bones?","They help reduce body mass, supporting flight.",[["light*|weigh less|less weight|reduc*|mass|fly*|flight|less heavy|lower weight"]]],
+["EC","What do we call the relationship in which both organisms benefit?","Mutualism",[["mutual*"]]],
+["EN","What process do plants use to produce sugar using sunlight, water, and carbon dioxide?","Photosynthesis",[["photosynthesis|photo synthesis"]]],
+["M","Ana places equal amounts of water in a shallow plate and a tall glass. Both are left under the same conditions. Which will generally evaporate faster?","Water in the shallow plate",[["plate|shallow"]]],
+["M","Why does the smell of freshly cooked food spread throughout a room?","Gas particles move and spread through diffusion.",[["diffus*|particle*|molecule*|gas*|mix*|move"]]],
+["EN","A metal spoon becomes hot when left in a cup of hot chocolate. What type of heat transfer occurs through the spoon?","Conduction",[["conduct*"]]],
+["I","A student uses a ruler to measure a pencil. Which metric unit is most appropriate: kilometer, meter, or centimeter?","Centimeter",[["centimeter|centimetre|cm|centi meter"]]],
+["I","A researcher tests whether sunlight affects seedling growth. One plant receives sunlight while another is kept in darkness. What is the independent variable?","Light exposure",[["light|sunlight|sun"]]],
+["I","What should a scientist do when the results of an experiment do not support the original hypothesis?","Report the results accurately and reconsider the hypothesis.",[["report*|honest*|accurate*|record*|revis*|reconsider*|change the hypothesis|new hypothesis|try again|retest|test again|repeat*|share*"]],{neg:1}],
+["DG","Why is chewing food important before swallowing?","It breaks food into smaller pieces and mixes it with saliva.",[["smaller|small|pieces|saliva|break*|grind*|easier|digest*|mix*"]]],
+["R","During exercise, a person breathes faster. Why does this happen?","The body needs more oxygen and must remove more carbon dioxide.",[["oxygen|carbon dioxide|energy|muscle*|more air"]]],
+["R","What happens to the chest cavity when the diaphragm contracts during inhalation?","Its volume increases.",[["increas*|bigger|expand*|larger|grow*|more space"]],{bad:["decreas*","smaller","shrink*"]}],
+["DG","Why is the large intestine important in digestion?","It absorbs remaining water and electrolytes from digestive waste.",[["water|electrolyte*|salt*|mineral*|absorb*|feces|waste|stool|compact*"]]],
+["L","A frog begins life as a tadpole living in water. What biological process changes it into an adult frog?","Metamorphosis",[["metamorph*"]]],
+["AD","Why do mangrove trees often have specialized roots?","To provide support and help them survive in waterlogged coastal soil.",[["support*|anchor*|stable|stabil*|salt*|water|oxygen*|breath*|mud*|stand*|waterlog*|flood*|wet|tide*|hold*|prop"]]],
+["AD","A polar bear has thick fur and a layer of fat. What is the primary purpose of these adaptations?","To reduce heat loss in cold environments",[["warm*|heat|cold|insulat*|retain*|keep*|survive|freez*"]]],
+["AD","Why can a cactus survive in dry environments better than many broad-leaved plants?","It stores water and has adaptations that reduce water loss.",[["water|store*|hold*"]]],
+["F","A heavy box is difficult to push across rough concrete but easier across smooth tiles. What causes the difference?","Different amounts of friction",[["friction|frictional"]]],
+["F","A toy car moves 12 meters in 4 seconds at constant speed. What is its speed?","3 meters per second",[["3"]]],
+["E","Why is a magnet able to attract an iron nail without touching it?","Magnetic force acts at a distance.",[["magnetic force|magnetic field|field|force|at a distance|distance|invisible|pull*"]]],
+["E","What happens to an electric circuit if the battery is removed?","The battery can no longer supply current, so the circuit stops operating.",[["stop*|no current|wont work|doesnt work|not work*|off|no energy|no power|dead|nothing|no electricity|go out|goes out"]],{neg:1}],
+["E","A student rubs a balloon against their hair and the balloon attracts small paper pieces. What scientific phenomenon explains this?","Static electricity",[["static"]]],
+["EC","Why are decomposers essential to the environment?","They break down dead organisms and return nutrients to the ecosystem.",[["break*|recycl*|nutrient*|dead|rot*|soil|clean*|waste"]]],
+["M","Odd one out! Which does not belong: melting, freezing, evaporation, or burning?","Burning. It is usually a chemical change; the others are physical changes.",[["burn*"]]],
+["CV","Odd one out! Which does not belong: heart, arteries, veins, or lungs?","Lungs. They are primarily part of the respiratory system.",[["lung"]]],
+["L","Odd one out! Which does not belong: butterfly, frog, mosquito, or chicken?","Chicken. It does not go through larval metamorphosis like the others.",[["chicken"]]],
+["E","Odd one out! Which does not belong: copper, aluminum, iron, or rubber?","Rubber. It is an electrical insulator.",[["rubber"]]],
+["F","Odd one out! Which does not belong: gravity, friction, magnetism, or evaporation?","Evaporation. It is a change of state, not a force.",[["evaporat*"]]],
+["DG","Fix the mistake! The stomach is the main organ responsible for absorbing most nutrients. What is wrong with that statement?","Most nutrient absorption occurs in the small intestine.",[["small intestine"]],{neg:1,bad:["large intestine"]}],
+["EN","Fix the mistake! Plants obtain all their food from the soil. What is wrong with that statement?","Plants produce sugars through photosynthesis.",[["photosynth*|sunlight|sun|light|make their own food|make food|sugar*|carbon dioxide"]],{neg:1}],
+["E","Fix the mistake! Like poles of magnets attract each other. What is wrong with that statement?","Like poles repel; opposite poles attract.",[["repel*|repuls*|push*|opposite poles attract|opposite attract*|unlike"]],{neg:1}],
+["I","Fix the mistake! A kilogram is a standard unit of length. What is wrong with that statement?","A kilogram measures mass; a meter measures length.",[["mass|weight|meter|metre"]],{neg:1}],
+["E","Fix the mistake! Electric current flows through a simple battery circuit even when the switch is open. What is wrong with that statement?","An open switch breaks the circuit and stops the current.",[["stop*|break*|broken|no current|not flow*|doesnt flow|no electricity|not complete|incomplete|gap"]],{neg:1}]
+];
+const ADV=[
+["M","A sealed container of water has a mass of 200 grams before freezing. What will be its total mass after the water freezes, assuming nothing enters or leaves?","200 grams",[["200|same|unchanged|no change|doesnt change|does not change|stays|remain*"]],{neg:1}],
+["M","Why does the temperature of pure ice remain approximately 0°C while it melts at normal atmospheric pressure?","The absorbed energy is used for the change of state rather than increasing temperature.",[["energy|heat"],["state|phase|melting|melt|bonds|particles|turn*|changing|change"]],{neg:1}],
+["I","A scientist measures how fertilizer affects plant growth. What is the dependent variable?","Plant growth",[["growth|grow*|height|size"]]],
+["I","In an experiment comparing plant growth under sunlight and darkness, name two conditions that should be kept the same.","Any two: plant species, water amount, soil type, pot size, or starting plant size",[["species|type of plant|kind of plant|plant type|plant kind","water|amount of water","soil|dirt","pot|container","size|height|age"]],{count:2}],
+["R","What happens to the diaphragm when a person inhales?","It contracts and moves downward, increasing chest cavity volume.",[["contract*|tighten*|flatten*|down*|lower*|pulls down"]]],
+["DG","Which digestive enzyme in saliva begins the chemical digestion of starch?","Salivary amylase",[["amylase|amalase|amylace"]]],
+["DG","Why does the small intestine have many villi and microvilli?","To increase surface area for efficient nutrient absorption",[["surface area|area|absorb*|more space|take in"]]],
+["EC","What is the relationship between producers, consumers, and decomposers in an ecosystem?","Producers make food, consumers obtain energy by eating organisms, and decomposers break down dead matter and recycle nutrients.",[["make food|make their own|produce food|produces food|photosynth*|make energy|make sugar|create food|producers make|producers produce"],["eat|eating|feed*|get energy|obtain*|eaten|consume food"],["break down|breaks down|decompose|recycl*|dead|rot|nutrients"]],{need:2}],
+["EC","Why is biodiversity important to an ecosystem?","It supports ecosystem functions, stability, and resilience to disturbances.",[["balance*|stab*|resilien*|survival|survive|healthy|food web|support*|keeps|different kinds|variety|each other|depend*"]]],
+["EN","A plant kept in complete darkness for several days becomes pale and weak. What essential process is limited by the absence of light?","Photosynthesis",[["photosynthesis|photo synthesis"]]],
+["F","A force of 20 N pushes a box to the right, while friction exerts 8 N to the left. What is the net horizontal force?","12 N to the right",[["12"]],{bad:["left"]}],
+["F","Two forces of 15 N act on an object in opposite directions. What is the net force?","0 N",[["0|no net|balanced|cancel*|nothing"]]],
+["F","Why does a person walking on a rough surface usually experience more friction than on a smooth, slippery surface?","Rougher surface interactions generally provide greater resistance to sliding.",[["bump*|grip*|resist*|interlock*|irregular*|uneven|sticks"]]],
+["E","In a simple series circuit, what happens to the other bulbs if one bulb burns out and breaks the circuit?","All the bulbs go out.",[["all|every*|out|off|stop*|go out|dont light|not light"]],{neg:1,bad:["stay lit","stays lit","stay on","remain lit","keep lit","still lit","still on","keep glowing"]}],
+["E","Why does a compass needle point approximately north–south when away from nearby magnetic disturbances?","It aligns with Earth’s magnetic field.",[["earth*|magnetic field"]]],
+["F","What happens to the gravitational force between two objects when the distance between their centers is doubled, assuming their masses stay the same?","It becomes one-fourth as strong.",[["quarter|fourth|1/4|one over four|1 over 4|25 percent|four times weaker|4 times weaker|four times less|4 times less"]],{bad:["half","1/2","double","twice","two times","four times stronger","4 times stronger"]}],
+["EN","What is the term for the process by which water moves from plant roots to leaves and evaporates through stomata?","Transpiration",[["transpir*"]]],
+["EC","Why might the removal of a top predator cause major changes in a food web?","It can change prey populations and cause a trophic cascade.",[["prey|population*|trophic|cascade|imbalance|unbalance*|overpopulat*|chain reaction|balance|disrupt*"]]],
+["E","What happens to the strength of an electromagnet when more turns of wire are added around its core, if the current and other conditions remain the same?","It generally becomes stronger.",[["stronger|strong*|increas*|more power*|greater|bigger"]],{bad:["weaker","weak*","decreas*","less","same","no change"]}],
+["I","Why is repeated testing important in scientific investigations?","It helps determine whether results are consistent and reliable.",[["reliab*|consisten*|accura*|valid*|confirm*|verify*|same result*|trust*|mistake*|error*|sure|certain|double check|check"]]],
+["M","What is the difference between evaporation and boiling?","Evaporation occurs at the surface; boiling occurs throughout a liquid when its vapor pressure reaches the surrounding pressure.",[["surface|top|exposed"],["throughout|whole liquid|bubbl*|everywhere|entire|inside|all of the liquid|boiling point|100|hot|heat*"]]],
+["G","What is the scientific term for animals that maintain a relatively stable internal body temperature through internal heat regulation?","Endotherms",[["endotherm*|warm blooded|homeotherm*"]]],
+["CV","What structure separates the left and right sides of the human heart?","Septum",[["septum|septa"]]],
+["RP","What is the function of the placenta during pregnancy?","It supports the exchange of nutrients, gases, and wastes between mother and developing baby.",[["nutrient*|food|oxygen|waste*|exchange|feed*|nourish*|supply*|connect*"]]],
+["F","What type of force acts on an object without requiring physical contact?","Non-contact force",[["non contact|noncontact|no contact|without contact|at a distance|action at a distance"]]],
+["EC","What is the process by which bacteria convert atmospheric nitrogen into forms usable by living organisms?","Nitrogen fixation",[["nitrogen fixation|nitrogen fixing|fixation"]]],
+["EN","A 60-watt bulb is used for 2 hours. How much electrical energy does it consume in watt-hours?","120 Wh",[["120"]]],
+["F","What is the term for the tendency of an object to resist changes in its motion?","Inertia",[["inertia"]]],
+["EC","What is the scientific name for the study of relationships among organisms and their environment?","Ecology",[["ecology|ecologic*"]]],
+["EN","What principle states that energy cannot be created or destroyed but can be transferred or transformed?","Law of Conservation of Energy",[["conserv*"]]],
+["M","Two identical wet towels are placed outside. One is spread flat and the other is folded. Both receive the same sunlight and wind. Which dries faster, and why?","The spread-out towel, because more surface area is exposed to evaporation.",[["spread*|flat|unfold*|surface area|more area|larger area|exposed|open"]],{neg:1}],
+["M","A student heats 100 mL of water until some evaporates. The remaining water measures 70 mL. How much water evaporated, assuming none spilled?","30 mL",[["30"]]],
+["M","A sealed plastic bottle contains liquid water and air. Some water evaporates inside the bottle. Does the total mass of the sealed bottle and its contents increase, decrease, or remain the same?","Remain the same",[["same|remain*|unchanged|no change|constant|doesnt change|stay*"]],{neg:1}],
+["I","A scientist wants to determine which soil type allows plants to grow tallest. What variable should be changed, and what should be measured?","Change the soil type; measure plant height.",[["soil"],["height|tall*|growth|grow*|size|length"]]],
+["I","Three students measure the same object and get 14.2 cm, 14.3 cm, and 14.2 cm. What is the average measurement to the nearest hundredth of a centimeter?","14.23 cm",[["14.23"]]],
+["R","Why can a person survive without food for longer than without oxygen?","Cells need oxygen continuously for aerobic respiration, while the body can temporarily use stored energy.",[["oxygen|stored|store*|fat|energy|respiration|cells need|continuous*"]]],
+["R","A person accidentally inhales food into the windpipe. Which structure normally helps prevent food from entering the airway during swallowing?","Epiglottis",[["epiglottis|epiglotis|epi glottis"]]],
+["DG","How do the digestive and circulatory systems work together to supply nutrients to body cells?","The digestive system breaks down food and absorbs nutrients; the circulatory system transports them to cells.",[["break*|digest*|absorb*"],["transport*|carr*|blood|circulat*|deliver*|pump*|bloodstream"]]],
+["DG","Why do the walls of the small intestine contain many blood capillaries?","To transport absorbed nutrients into the bloodstream.",[["transport*|carr*|bloodstream|absorb*|pick*|move*|nutrient*|take*|deliver*|into the blood|to the blood"]]],
+["L","A farmer plants seeds from the same species in moist soil and dry soil. Only the seeds in moist soil germinate. What conclusion is supported by this experiment, assuming other conditions are equal?","Water availability affects germination.",[["water|moisture|moist|wet"]]],
+["EC","Why would a population of insects that feed on one specific plant species be threatened if that plant disappeared?","They could lose their primary food source.",[["food|starv*|eat*|die|lose|source|feed*|extinct|survive*|habitat|depend*"]]],
+["EC","A food chain consists of grass, grasshopper, frog, and snake. What may happen to the grasshopper population if the number of frogs decreases, assuming other factors stay constant?","The grasshopper population may increase.",[["increas*|more|grow*|rise|go up|goes up|bigger|multipl*|overpopulat*"]],{bad:["decreas*","fewer","less","drop*","go down","goes down","die","smaller"]}],
+["L","Why are some seeds dispersed by wind while others are dispersed by animals?","Different seed structures and adaptations allow different methods of dispersal.",[["structur*|adapt*|shape*|wing*|hook*|fluffy|light*|spike*|burr*|fruit*|sticky|float*|different|feather*|parachute*|eaten|fur"]]],
+["F","Two students push a box in the same direction with forces of 18 N and 12 N. Friction acts in the opposite direction with 10 N. What is the net horizontal force?","20 N in the direction of the push",[["20"]]],
+["F","A car travels 90 kilometers in 3 hours at constant speed. What is its speed in kilometers per hour?","30 km/h",[["30"]]],
+["F","Why does a moving bicycle eventually stop when the rider stops pedaling on a level road?","Resistive forces, including friction and air resistance, slow it down.",[["friction|air resistance|resistance|drag|resistive|air"]]],
+["E","Two identical bulbs are connected in parallel to a battery. One bulb burns out and creates an open branch. What happens to the other bulb?","It remains lit if its branch stays complete and the battery works.",[["stay*|remain*|still|lit|glow*|keep*|continue*|work*|brighter|bright"]],{bad:["go out","goes out","turn off","turns off","stop*","off","dim*","dead","die*","dies"]}],
+["E","Why does wrapping more turns of insulated wire around an iron core generally make an electromagnet stronger when current remains constant?","More turns increase the magnetic field produced by the coil.",[["magnetic|field|stronger|strong*|increas*|add*|combin*|concentrat*"]]],
+["E","A compass is placed near a strong bar magnet. Why might its needle no longer point toward Earth’s magnetic north?","The nearby magnet’s magnetic field influences the needle’s direction.",[["field|attract*|pull*|influenc*|affect*|stronger|nearby magnet|interfer*|disturb*|force"]]],
+["EC","A forest loses many of its trees because of illegal logging. Name two possible environmental effects.","Increased soil erosion and loss of wildlife habitats. Other valid effects include reduced biodiversity and disrupted water cycles.",[["erosion|soil|landslide*","habitat*|home*|animals|wildlife","biodiversity|extinct*|species","water cycle|flood*|rain*|drought","climate|global warming|carbon|temperature|greenhouse","oxygen|air"]],{count:2}]
+];
+const ALL=[].concat(
+  EASY.map((r,i)=>mk(r,"easy","e"+(i+1))),
+  HARD.map((r,i)=>mk(r,"hard","h"+(i+1))),
+  ADV.map((r,i)=>mk(r,"advanced","a"+(i+1)))
+);
+function mk(r,level,id){return Object.assign({id,level,t:r[0],q:r[1],a:r[2],k:r[3]},r[4]||{});}
+
+/* ===================== Answer checking ===================== */
+const NUMW={zero:0,one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10,eleven:11,twelve:12,thirteen:13,fourteen:14,fifteen:15,sixteen:16,seventeen:17,eighteen:18,nineteen:19};
+const TENW={twenty:20,thirty:30,forty:40,fifty:50,sixty:60,seventy:70,eighty:80,ninety:90};
+const NEG=new Set(["not","never","dont","doesnt","isnt","cant","wont","didnt","arent","wasnt","cannot"]);
+function stemWord(w){
+  if(w.length<=3||w.indexOf("*")>=0||/\d/.test(w))return w;
+  if(/ies$/.test(w))return w.slice(0,-3)+"y";
+  if(/(ses|xes|ches|shes|zes)$/.test(w))return w.slice(0,-2);
+  if(/[^s]s$/.test(w))return w.slice(0,-1);
+  return w;
+}
+function normText(s,isKey){
+  s=String(s).toLowerCase().replace(/[’'`]/g,"").replace(/°/g," degrees ").replace(/[–—-]/g," ");
+  s=s.replace(isKey?/[^a-z0-9.\/*| ]/g:/[^a-z0-9.\/ ]/g," ");
+  s=s.replace(/\.(?!\d)|(?<!\d)\./g," ").replace(/\/(?!\d)|(?<!\d)\//g," ");
+  return s.replace(/\s+/g," ").trim();
+}
+function numberize(tk){
+  const out=[];let i=0;
+  const isN=w=>w in NUMW||w in TENW||w==="hundred";
+  while(i<tk.length){
+    if(!isN(tk[i])){out.push(tk[i]);i++;continue;}
+    let cur=0,j=i;
+    while(j<tk.length){
+      const w=tk[j];
+      if(w in NUMW)cur+=NUMW[w];else if(w in TENW)cur+=TENW[w];else if(w==="hundred")cur=(cur||1)*100;
+      else if(w==="and"&&j>i&&j+1<tk.length&&isN(tk[j+1])){j++;continue;}
+      else break;
+      j++;
+    }
+    let str=String(cur);
+    if(tk[j]==="point"&&j+1<tk.length&&(tk[j+1] in NUMW&&NUMW[tk[j+1]]<10||/^\d$/.test(tk[j+1]))){
+      let dec="";j++;
+      while(j<tk.length&&((tk[j] in NUMW&&NUMW[tk[j]]<10)||/^\d$/.test(tk[j]))){dec+=(tk[j] in NUMW?NUMW[tk[j]]:tk[j]);j++;}
+      str+="."+dec;
+    }
+    out.push(str);i=j;
+  }
+  return out;
+}
+function toks(s,isKey){
+  const t=normText(s,isKey).split(" ").filter(Boolean);
+  return numberize(t).map(stemWord);
+}
+function lev(a,b){
+  if(a===b)return 0;const m=a.length,n=b.length;if(!m||!n)return Math.max(m,n);
+  let prev=Array.from({length:n+1},(_,i)=>i);
+  for(let i=1;i<=m;i++){const cur=[i];for(let j=1;j<=n;j++){cur[j]=Math.min(prev[j]+1,cur[j-1]+1,prev[j-1]+(a[i-1]===b[j-1]?0:1));}prev=cur;}
+  return prev[n];
+}
+function tokMatch(p,t){
+  if(p.endsWith("*")){const pre=p.slice(0,-1);return t.startsWith(pre);}
+  if(p===t)return true;
+  if(p.length>=6&&!/\d/.test(p)&&!/\d/.test(t)){return lev(p,t)<=(p.length>=10?2:1);}
+  return false;
+}
+function phraseIn(T,alt){
+  const P=toks(alt,true);if(!P.length)return false;
+  for(let i=0;i+P.length<=T.length;i++){let ok=true;for(let j=0;j<P.length;j++){if(!tokMatch(P[j],T[i+j])){ok=false;break;}}if(ok)return true;}
+  return false;
+}
+function anyAlt(T,altStr){return altStr.split("|").some(a=>a.trim()&&phraseIn(T,a));}
+const IDK=/\b(i )?(dont|do not) know\b|\bnot sure\b|\bno idea\b|\bidk\b|\bi give up\b/;
+function evalOne(q,text){
+  const raw=normText(text);
+  if(!raw)return "unsure";
+  if(IDK.test(raw))return "idk";
+  const T=toks(text);
+  if(!T.length)return "unsure";
+  if(!q.neg&&T.some(t=>NEG.has(t)))return "wrong";
+  if(q.bad&&q.bad.some(p=>phraseIn(T,p)))return "wrong";
+  if(q.count){
+    const n=q.k[0].filter(c=>anyAlt(T,c)).length;
+    return n>=q.count?"correct":n>0?"partial":"wrong";
+  }
+  const hits=q.k.filter(g=>g.some(a=>anyAlt(T,a))).length;
+  const need=q.need||q.k.length;
+  return hits>=need?"correct":hits>0?"partial":"wrong";
+}
+function judge(q,alts){
+  const list=alts.slice(0,2);
+  const rs=list.map(a=>evalOne(q,a));
+  if(rs.includes("correct"))return "correct";
+  return rs[0];
+}
+function parseCommand(text){
+  const n=normText(text);
+  if(/^(please )?(repeat|replay|again|say (it|that) again)( the)?( question)?( please)?$/.test(n))return "repeat";
+  if(/^(next|next question|go next|move on)( please)?$/.test(n))return "next";
+  if(/^(skip|skip (this )?question|pass)( please)?$/.test(n))return "skip";
+  if(/^(stop|end|quit|exit)( the)? quiz$|^quit$|^exit$/.test(n))return "stop";
+  if(/^((what is|whats|what s|tell me) )?(my )?score( please)?$/.test(n))return "score";
+  if(/^(hint|give me a hint|can i have a hint|i need a hint)( please)?$/.test(n))return "hint";
+  return null;
+}
+function speakable(t){
+  return String(t).replace(/★/g,"").replace(/_{2,}/g," blank ").replace(/°C/g," degrees Celsius").replace(/(\d+)\s*mL\b/g,"$1 milliliters")
+    .replace(/(\d+(?:\.\d+)?)\s*km\/h/g,"$1 kilometers per hour").replace(/(\d+(?:\.\d+)?)\s*cm\b/g,"$1 centimeters").replace(/(\d+)\s*Wh\b/g,"$1 watt hours")
+    .replace(/Newton \(N\)/g,"Newton").replace(/(\d+)\s*N\b/g,"$1 newtons").replace(/—|–/g,", ").replace(/\s+/g," ").trim();
+}
+/*PURE-END*/
+
+/* ===================== Storage ===================== */
+const mem={};
+const store={
+  get(k,d){try{const v=localStorage.getItem("swqb."+k);if(v!==null)return JSON.parse(v);}catch(e){}return k in mem?mem[k]:d;},
+  set(k,v){mem[k]=v;try{localStorage.setItem("swqb."+k,JSON.stringify(v));}catch(e){}}
+};
+const DEFAULTS={name:"",rate:1,volume:1,mute:false,sfx:true,numQ:10,timerPractice:false,timerComp:true,autoListen:true,filter:"all",level:"easy"};
+let settings=Object.assign({},DEFAULTS,store.get("settings",{}));
+let stats=Object.assign({sessions:[],missed:{},topics:{},badges:{}},store.get("stats",{}));
+let custom=store.get("custom",[]);
+const saveSettings=()=>store.set("settings",settings);
+const saveStats=()=>store.set("stats",stats);
+
+/* ===================== Helpers ===================== */
+const $=s=>document.querySelector(s);
+const app=$("#app");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]||c));
+const rnd=n=>Math.floor(Math.random()*n);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;};
+const ORD=["zero","one","two","three","four","five","six","seven","eight","nine","ten","eleven","twelve","thirteen","fourteen","fifteen","sixteen","seventeen","eighteen","nineteen","twenty"];
+const ordWord=n=>n<=20?ORD[n]:String(n);
+const allQuestions=()=>ALL.concat(custom);
+const topicName=c=>(TOPICS[c]||{n:"Science"}).n;
+const live=t=>{$("#live").textContent=t;};
+let toastMsg="";
+
+/* bags so feedback phrases don't repeat back-to-back */
+function bag(list){let b=[];return()=>{if(!b.length)b=shuffle(list);return b.pop();};}
+const praise=bag(["Fantastic work!","You’re a science superstar!","Amazing answer!","Brilliant thinking!","You got it!","Excellent job, future scientist!","Wonderful!","Super smart!"]);
+const tryAgain=bag(["Good try!","Nice effort!","Great thinking!","Almost there!","Thanks for trying!","Good guess, scientist!"]);
+
+/* ===================== Sound effects ===================== */
+let actx=null;
+function tone(freqs,dur){
+  if(settings.mute||!settings.sfx)return;
+  try{
+    actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+    let t=actx.currentTime;
+    freqs.forEach(f=>{const o=actx.createOscillator(),g=actx.createGain();o.type="triangle";o.frequency.value=f;
+      g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(0.18*settings.volume,t+.02);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+      o.connect(g).connect(actx.destination);o.start(t);o.stop(t+dur+.02);t+=dur*.8;});
+  }catch(e){}
+}
+const sfx={ok:()=>tone([523,659,784],.16),bad:()=>tone([330,262],.22),tick:()=>tone([880],.05),win:()=>tone([523,659,784,1047],.2),mic:()=>tone([660],.08)};
+
+/* ===================== Text to speech ===================== */
+const ttsOK="speechSynthesis" in window&&"SpeechSynthesisUtterance" in window;
+let voiceCache=null,speakFin=null,speakTimer=null;
+function pickVoice(){
+  if(!ttsOK)return null;
+  const vs=speechSynthesis.getVoices();if(!vs.length)return voiceCache;
+  const en=vs.filter(v=>/^en(-|_)/i.test(v.lang)||/^en$/i.test(v.lang));
+  const pref=["Google US English","Samantha","Microsoft Aria","Microsoft Jenny","Microsoft Zira","Karen","Moira","Google UK English Female"];
+  for(const p of pref){const v=en.find(x=>x.name.indexOf(p)>=0);if(v){voiceCache=v;return v;}}
+  voiceCache=en.find(v=>/US/i.test(v.lang))||en[0]||null;return voiceCache;
+}
+if(ttsOK){try{speechSynthesis.onvoiceschanged=()=>{voiceCache=null;pickVoice();};}catch(e){}}
+function cancelSpeech(){
+  if(speakFin){const f=speakFin;speakFin=null;try{speechSynthesis.cancel();}catch(e){}f();}
+  else if(ttsOK){try{speechSynthesis.cancel();}catch(e){}}
+}
+function speak(text){
+  return new Promise(res=>{
+    cancelSpeech();
+    text=speakable(text);
+    if(settings.mute||!ttsOK||!text){res();return;}
+    const u=new SpeechSynthesisUtterance(text);
+    u.rate=settings.rate;u.volume=settings.volume;u.pitch=1.12;u.lang="en-US";
+    const v=pickVoice();if(v)u.voice=v;
+    let done=false;
+    const fin=()=>{if(done)return;done=true;clearTimeout(speakTimer);if(speakFin===fin)speakFin=null;res();};
+    u.onend=fin;u.onerror=fin;speakFin=fin;
+    speakTimer=setTimeout(fin,Math.max(4000,text.length*90/Math.max(.5,settings.rate)+2500));
+    try{speechSynthesis.speak(u);}catch(e){fin();}
+  });
+}
+
+/* ===================== Speech recognition ===================== */
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+const micOK=!!SR;
+const Mic={rec:null,gen:0,
+  start(cb){
+    this.stop();
+    if(!SR){cb.error("unsupported");return;}
+    const gen=++this.gen;let got=false,err=null;
+    const r=new SR();
+    r.lang="en-US";r.interimResults=true;r.continuous=false;r.maxAlternatives=3;
+    r.onresult=e=>{
+      if(gen!==this.gen)return;
+      let interim="",fin=null;
+      for(let i=e.resultIndex;i<e.results.length;i++){
+        const res=e.results[i];
+        if(res.isFinal){fin=[];for(let j=0;j<res.length;j++){const t=(res[j].transcript||"").trim();if(t)fin.push(t);}}
+        else interim+=res[0].transcript;
+      }
+      if(fin&&fin.length){got=true;cb.final(fin);}else if(interim)cb.interim(interim.trim());
+    };
+    r.onerror=e=>{if(gen!==this.gen)return;err=e.error;cb.error(e.error);};
+    r.onend=()=>{if(gen!==this.gen)return;cb.end(got,err);};
+    this.rec=r;
+    try{r.start();}catch(e){cb.error("start-failed");}
+  },
+  stop(){
+    this.gen++;const r=this.rec;this.rec=null;
+    if(r){r.onresult=r.onerror=r.onend=null;try{r.abort();}catch(e){}}
+  }
+};
+function micErrorText(code){
+  switch(code){
+    case"not-allowed":case"service-not-allowed":return"The microphone is blocked. Click the lock or microphone icon in the address bar, allow the microphone, then tap the mic button. You can also type your answer.";
+    case"audio-capture":return"I can’t find a working microphone. Check that one is plugged in, or type your answer.";
+    case"network":return"The browser’s speech service can’t be reached (it needs an internet connection). You can type your answer instead.";
+    case"unsupported":return"This browser can’t turn speech into text. Use Google Chrome or Microsoft Edge for voice answers, or type your answers.";
+    case"language-not-supported":return"English speech recognition isn’t available in this browser. You can type your answers.";
+    default:return"The microphone had a problem ("+code+"). Try the mic button again or type your answer.";
+  }
+}
+
+/* ===================== Timer ===================== */
+const Timer={id:null,rem:0,tot:0,endAt:0,onTick:null,onEnd:null,
+  start(ms,onTick,onEnd){this.clear();this.tot=this.rem=ms;this.onTick=onTick;this.onEnd=onEnd;this.run();},
+  run(){this.endAt=Date.now()+this.rem;clearInterval(this.id);this.id=setInterval(()=>{
+    this.rem=Math.max(0,this.endAt-Date.now());if(this.onTick)this.onTick(this.rem,this.tot);
+    if(this.rem<=0){const f=this.onEnd;this.clear();if(f)f();}},100);},
+  pause(){if(this.id){clearInterval(this.id);this.id=null;this.rem=Math.max(0,this.endAt-Date.now());}},
+  resume(){if(!this.id&&this.rem>0&&this.onEnd)this.run();},
+  clear(){clearInterval(this.id);this.id=null;this.onEnd=null;this.onTick=null;this.rem=0;this.tot=0;}
+};
+
+/* ===================== Badges ===================== */
+const BADGES=[
+  {id:"little",em:"🧪",name:"Little Scientist",desc:"Finish an Easy quiz"},
+  {id:"explorer",em:"🔭",name:"Science Explorer",desc:"Finish a Hard quiz"},
+  {id:"genius",em:"🧠",name:"Science Genius",desc:"Finish an Advanced quiz"},
+  {id:"perfect",em:"⭐",name:"Perfect Round",desc:"Answer every question right (5 or more questions)"},
+  {id:"champion",em:"🏆",name:"Science Champion",desc:"Score 80% or more in a Competition (10 or more questions)"},
+  {id:"master",em:"👑",name:"Quiz Bee Master",desc:"Earn all five other badges"}
+];
+function awardBadges(s){
+  const got=[];const give=id=>{if(!stats.badges[id]){stats.badges[id]=Date.now();got.push(id);}};
+  const lv=s.level;
+  if(s.scored>=3){
+    if(lv==="easy"||lv==="all")give("little");
+    if(lv==="hard"||lv==="all")give("explorer");
+    if(lv==="advanced"||lv==="all")give("genius");
+  }
+  if(s.scored>=5&&s.correct===s.scored)give("perfect");
+  if(s.mode==="competition"&&s.scored>=10&&s.correct/s.scored>=0.8)give("champion");
+  if(["little","explorer","genius","perfect","champion"].every(b=>stats.badges[b]))give("master");
+  return got;
+}
+
+/* ===================== Navigation ===================== */
+let view="home",quiz=null,lastSession=null,pendingStart=null,micTestedThisVisit=false,mtState={};
+function cleanup(){
+  Timer.clear();Mic.stop();cancelSpeech();
+  if(quiz){quiz.dead=true;(quiz.timeouts||[]).forEach(clearTimeout);quiz=null;}
+  mtState={};
+}
+function go(v){cleanup();view=v;render();window.scrollTo(0,0);}
+function render(){
+  const fn={home:homeView,mictest:micTestView,quiz:quizView,results:resultsView,review:reviewView,progress:progressView,sound:soundView,parent:parentView}[view]||homeView;
+  app.innerHTML=fn();
+  if(view==="quiz")ui();
+  if(view==="results")startConfetti();
+}
+
+/* ===================== Views ===================== */
+function robot(){
+  return `<svg viewBox="0 0 120 134" class="robot" role="img" aria-label="Friendly robot scientist mascot">
+  <line x1="60" y1="9" x2="60" y2="22" stroke="#7c4dff" stroke-width="4" stroke-linecap="round"/><circle cx="60" cy="8" r="6" fill="#ffc533"/>
+  <rect class="ear" x="10" y="42" width="12" height="22" rx="6" fill="#27d3a2"/><rect class="ear" x="98" y="42" width="12" height="22" rx="6" fill="#27d3a2"/>
+  <rect x="20" y="22" width="80" height="64" rx="24" fill="#3b6cf6"/><rect x="29" y="31" width="62" height="43" rx="17" fill="#eaf4ff"/>
+  <circle cx="47" cy="50" r="7" fill="#14204a"/><circle cx="73" cy="50" r="7" fill="#14204a"/><circle cx="49" cy="48" r="2.2" fill="#fff"/><circle cx="75" cy="48" r="2.2" fill="#fff"/>
+  <ellipse class="mouth" cx="60" cy="63" rx="8" ry="3" fill="#e8532f"/>
+  <rect x="33" y="90" width="54" height="36" rx="15" fill="#7c4dff"/><circle cx="60" cy="108" r="8" fill="#ffc533"/>
+  <path d="M20 100 q-12 4 -8 16" stroke="#3b6cf6" stroke-width="7" fill="none" stroke-linecap="round"/>
+  <path d="M100 100 q12 4 8 16" stroke="#3b6cf6" stroke-width="7" fill="none" stroke-linecap="round"/>
+  </svg>`;
+}
+function compatBanner(){
+  let h="";
+  const ua=navigator.userAgent;const chromium=/Chrome|Edg/.test(ua)&&!/OPR|Firefox/.test(ua);
+  if(!micOK)h+=`<div class="banner bad" role="alert">This browser can’t turn speech into text, so you’ll answer by typing. For voice answers, open this page in Google Chrome or Microsoft Edge.</div>`;
+  else if(!chromium)h+=`<div class="banner warn">Voice answers work best in Google Chrome or Microsoft Edge. Other browsers may not listen reliably, but you can always type your answer.</div>`;
+  if(!ttsOK)h+=`<div class="banner warn">This browser can’t read questions aloud. You’ll see each question on the screen instead.</div>`;
+  if(toastMsg){h+=`<div class="banner warn" role="alert">${esc(toastMsg)}</div>`;toastMsg="";}
+  return h;
+}
+function filterOptions(sel){
+  let h=`<option value="all"${sel==="all"?" selected":""}>All topics</option><optgroup label="Quarter">`;
+  for(const q of [1,2,3,4])h+=`<option value="q:${q}"${sel==="q:"+q?" selected":""}>${QN[q]}</option>`;
+  h+=`</optgroup><optgroup label="Chapter">`;
+  for(const c of [1,2,3,4,5,6,7,8,0])h+=`<option value="ch:${c}"${sel==="ch:"+c?" selected":""}>${CH[c]}</option>`;
+  h+=`</optgroup><optgroup label="Topic">`;
+  for(const t in TOPICS)h+=`<option value="t:${t}"${sel==="t:"+t?" selected":""}>${TOPICS[t].n}</option>`;
+  return h+`</optgroup>`;
+}
+function inFilter(q,f){
+  if(f==="all")return true;const [k,v]=f.split(":");const T=TOPICS[q.t];if(!T)return false;
+  if(k==="q")return T.q===+v;if(k==="ch")return T.ch===+v;if(k==="t")return q.t===v;return true;
+}
+function homeView(){
+  const L=settings.level;
+  const card=(id,em,name,title,lines)=>`<button role="radio" aria-checked="${L===id}" data-act="level" data-v="${id}"><span class="tick">${L===id?"✓ Chosen":""}</span><b>${em} ${name}: ${title}</b><div class="small">${lines}</div></button>`;
+  return `<main class="wrap">
+  ${compatBanner()}
+  <header class="hero"><div class="mascot" id="homeMascot">${robot()}</div>
+  <div class="bubble"><h1>Science Wonder Quiz Bee</h1><p>Welcome to Science Wonder Quiz Bee! Are you ready to become a Science Champion?</p>
+  <button class="btn sm mint" data-act="hello">🔊 Say hello</button></div></header>
+  <section class="card"><label for="nm">Your name or nickname</label><input type="text" id="nm" maxlength="20" autocomplete="off" value="${esc(settings.name)}" placeholder="Type your nickname"></section>
+  <section><h2>1. Choose your level</h2>
+  <div class="grid c2 levels" role="radiogroup" aria-label="Difficulty level">
+  ${card("easy","🧪","EASY","Little Scientist","Beginner questions · 10 seconds · 1 point")}
+  ${card("hard","🔭","HARD","Science Explorer","Intermediate questions · 20 seconds · 3 points")}
+  ${card("advanced","🧠","ADVANCED","Science Genius","Challenging questions · 30 seconds · 5 points")}
+  ${card("all","🏅","ALL ROUNDS","Grand Quiz Bee","Easy, then Hard, then Advanced")}
+  </div>
+  <label for="flt">Topic area</label><select id="flt" data-act="filter">${filterOptions(settings.filter)}</select></section>
+  <section><h2>2. Choose your game</h2>
+  <div class="grid c2">
+  <button class="btn" data-act="start" data-v="practice">📘 Practice Mode</button>
+  <button class="btn coral" data-act="start" data-v="competition">🏁 Competition Mode</button>
+  <button class="btn purple" data-act="start" data-v="voice">🎙️ Voice-Only Challenge</button>
+  <button class="btn yellow" data-act="start" data-v="mistakes">🔁 Practice My Mistakes${Object.keys(stats.missed).length?" ("+Object.keys(stats.missed).length+")":""}</button>
+  </div></section>
+  <section class="row tiles" style="margin-top:18px">
+  <button class="btn ghost" data-act="mictest">🎤 Microphone Test</button>
+  <button class="btn ghost" data-act="progress">📈 Progress and Badges</button>
+  <button class="btn ghost" data-act="sound">🔊 Sound Settings</button>
+  <button class="btn ghost" data-act="parent">👩‍🏫 Parent and Teacher</button>
+  </section>
+  <p class="small" style="margin-top:22px">Your answers are never recorded or saved as audio. Only your scores and progress stay on this device.</p>
+  </main>`;
+}
+function micTestView(){
+  const m=mtState;
+  const ua=/Chrome|Edg/.test(navigator.userAgent);
+  return `<main class="wrap"><h1>Microphone Test</h1>
+  <div class="card">
+  <p><b>Speech recognition:</b> ${micOK?"✓ Supported by this browser":"✗ Not supported. Use Chrome or Edge, or type your answers."}</p>
+  <p><b>Read-aloud voice:</b> ${ttsOK?"✓ Supported":"✗ Not supported"}</p>
+  <p class="small">Voice answers are tested in Google Chrome and Microsoft Edge${ua?"":" (you’re using another browser)"}. The browser will ask permission to use the microphone. The microphone only listens while the red button is pulsing. This app never records or stores audio. Chrome and Edge may send speech to an online service to turn it into words.</p>
+  </div>
+  <div class="card"><h2>Step 1: Can you hear me?</h2>
+  <button class="btn mint" data-act="mt-voice">🔊 Play a test sentence</button></div>
+  <div class="card"><h2>Step 2: Can I hear you?</h2>
+  <div class="row"><button class="btn ${m.listening?"coral":"purple"}" data-act="mt-mic" ${micOK?"":"disabled"}>${m.listening?"⏹ Stop listening":"🎤 Start microphone test"}</button></div>
+  <p class="miclabel" id="mtStatus">${esc(m.status||(m.listening?"Listening… say “hello science”.":"Press the button and say “hello science”."))}</p>
+  <p class="heard" id="mtHeard">${m.heard?"I heard: “"+esc(m.heard)+"”":""}</p>
+  ${m.error?`<div class="banner bad" role="alert">${esc(micErrorText(m.error))}</div>`:""}
+  ${m.ok?`<div class="banner ok">✓ Your microphone works!</div>`:""}
+  </div>
+  <div class="row">
+  ${pendingStart?`<button class="btn" data-act="mt-go">▶ Start the quiz</button>`:""}
+  <button class="btn ghost" data-act="home">⬅ Back home</button></div></main>`;
+}
+function quizView(){
+  const me=quiz;const voice=me.mode==="voice";
+  return `<main class="wrap ${voice?"voiceonly":""}">
+  <div class="qtop">
+    <button class="btn sm ghost" data-act="q-exit" id="qExit">✕ Exit</button>
+    <div class="row"><span class="chip" id="qMode"></span><span class="chip" id="qLevel"></span></div>
+    <div class="row"><b id="qScoreWrap" aria-live="off">⭐ <span id="qScore">0</span> pts</b>
+    <button class="btn sm ghost" data-act="q-mute" id="qMute" aria-pressed="false"></button></div>
+  </div>
+  <div class="bar" role="progressbar" aria-label="Quiz progress"><i id="qBar"></i></div><div class="small" id="qCount"></div>
+  <div class="stage">
+    <div class="host" id="hostBox"><div class="mascot">${robot()}</div><div class="hostsay" id="qHost"></div></div>
+    <div class="qcard">
+      <div class="row"><span class="chip" id="qTopic"></span><span class="chip" id="qCorrect"></span></div>
+      <h2 id="qText" style="margin-top:.5em"></h2>
+      <div class="timer" id="timer" hidden><svg viewBox="0 0 100 100" aria-hidden="true"><circle class="bg" cx="50" cy="50" r="45"/><circle class="fg" id="tFg" cx="50" cy="50" r="45" style="stroke-dashoffset:0"/></svg><span id="tNum" role="timer"></span></div>
+    </div>
+  </div>
+  <div class="micarea">
+    <button class="mic" id="micBtn" data-act="q-mic" aria-label="Microphone"></button>
+    <div class="miclabel" id="micLabel" aria-live="polite"></div>
+    <div class="heard" id="heard"></div>
+    <div id="micMsg"></div>
+    <div class="row center" id="ctl" style="margin-top:8px">
+      <button class="btn sm mint" data-act="q-replay">🔁 Replay question</button>
+      <button class="btn sm yellow" data-act="q-hint" id="hintBtn">💡 Hint</button>
+      <button class="btn sm ghost" data-act="q-clear" id="clearBtn">🎤 Say it again</button>
+      <button class="btn sm ghost" data-act="q-type" id="typeBtn">⌨ Type instead</button>
+      <button class="btn sm ghost" data-act="q-skip" id="skipBtn">⏭ Skip</button>
+    </div>
+    <div class="typebox" id="typeBox" hidden><input type="text" id="typeIn" autocomplete="off" placeholder="Type your answer" aria-label="Type your answer"><button class="btn" data-act="q-submit">Check</button></div>
+  </div>
+  <div id="fb"></div>
+  <div class="row center" id="nextRow" hidden><button class="btn yellow" data-act="q-retry" id="retryBtn">🔄 Try again</button><button class="btn" data-act="q-next" id="nextBtn">Next question ▶</button></div>
+  </main>`;
+}
+const MODE_NAME={practice:"Practice",competition:"Competition",voice:"Voice-Only",mistakes:"Practice My Mistakes"};
+const STATE_LABEL={IDLE:"Getting ready…",SPEAKING:"Listen to the question…",PROCESSING:"Checking your answer…",FEEDBACK:"",NEXT:""};
+function ui(){
+  const me=quiz;if(!me||view!=="quiz"||!me.q)return;
+  const q=me.q,L=LEVELS[q.level];
+  const set=(id,t)=>{const e=$(id);if(e&&e.textContent!==String(t))e.textContent=t;};
+  const show=(id,on)=>{const e=$(id);if(e)e.hidden=!on;};
+  set("#qMode",MODE_NAME[me.mode]);set("#qLevel",L.emoji+" "+L.name+" · "+L.pts+" pt"+(L.pts>1?"s":""));
+  $("#qLevel").className="chip lv-"+q.level;
+  set("#qScore",me.score);
+  set("#qCount","Question "+(me.i+1)+" of "+me.qs.length+" · "+me.correct+" correct");
+  $("#qBar").style.width=Math.round(me.i/me.qs.length*100)+"%";
+  set("#qTopic","🔬 "+topicName(q.t));
+  set("#qCorrect",me.mode==="competition"?"One final answer":(me.mode==="practice"||me.mode==="mistakes"?"No pressure":"Voice only"));
+  set("#qText",q.q);
+  set("#qHost",me.hostText||"");
+  const mute=$("#qMute");mute.textContent=settings.mute?"🔇 Sound off":"🔊 Sound on";mute.setAttribute("aria-pressed",String(settings.mute));
+  const hb=$("#hostBox");hb.className="host"+(me.state==="SPEAKING"?" speaking":"")+(me.state==="LISTENING"&&me.micOn?" listening":"");
+  // timer
+  const timed=me.timed;show("#timer",timed&&me.state!=="FEEDBACK"||(timed&&!!me.fb));
+  if(timed){const rem=Timer.tot?Timer.rem:me.timeLeft;const tot=Timer.tot||me.timeTotal;const frac=tot?Math.max(0,Math.min(1,rem/tot)):1;
+    $("#tFg").style.strokeDashoffset=String(283*(1-frac));$("#timer").classList.toggle("low",rem<=3000&&rem>0);set("#tNum",Math.ceil(rem/1000));}
+  // mic
+  const mb=$("#micBtn");const listening=me.state==="LISTENING"&&me.micOn;
+  mb.className="mic"+(listening?" listening":"")+((me.state==="LISTENING")?"":" busy");
+  mb.textContent=listening?"🎙️":"🎤";mb.setAttribute("aria-pressed",String(listening));
+  mb.setAttribute("aria-label",listening?"Stop listening":"Tap to answer");
+  let lab=STATE_LABEL[me.state]||"";
+  if(me.state==="LISTENING")lab=listening?"I’m listening. Say your answer!":(me.micStatus==="ok"||me.micStatus==="idle"?"Tap to Answer":"Type your answer below");
+  if(me.state==="FEEDBACK")lab=me.waitNext?"Ready when you are!":"";
+  set("#micLabel",lab);
+  set("#heard",me.heard?"You said: “"+me.heard+"”":(me.interim?"…"+me.interim:""));
+  $("#micMsg").innerHTML=me.micMsg?`<div class="banner bad" role="alert">${esc(me.micMsg)}</div>`:"";
+  // controls
+  const prac=me.mode==="practice"||me.mode==="mistakes";
+  const voiceOnly=me.mode==="voice";
+  const active=me.state==="LISTENING";
+  show("#ctl",!me.fb);
+  show("#hintBtn",prac&&active);show("#skipBtn",true);show("#clearBtn",active&&me.micOn===false&&micOK&&me.micStatus!=="denied"&&false);
+  show("#typeBtn",!voiceOnly||me.typed);
+  show("#typeBox",me.typed&&!me.fb);
+  $("#micBtn").hidden=!!me.fb;$("#micLabel").hidden=!!me.fb;$("#heard").hidden=!!me.fb&&false;
+  // feedback
+  const fb=$("#fb");
+  if(me.fb){
+    const f=me.fb;const cls=f.kind==="correct"?"ok":(f.kind==="timeout"?"time":"bad");
+    const icon=f.kind==="correct"?"✓":(f.kind==="timeout"?"⏱":"✗");
+    const title=f.kind==="correct"?"Correct!":f.kind==="timeout"?"Time is up!":f.kind==="skipped"?"Skipped":"Good try!";
+    const html=`<div class="fb ${cls} ${f.kind==="correct"?"pop":(f.kind==="timeout"?"":"shake")}" role="status"><div class="ic" aria-hidden="true">${icon}</div><div><b>${title}</b>${f.kind==="correct"?esc(f.msg):""}<div class="ans">${f.kind==="correct"?"":"Correct answer: "}<b style="display:inline">${esc(q.a)}</b></div><div class="small">Topic: ${esc(topicName(q.t))} · ${esc(L.name)}</div></div></div>`;
+    if(fb.dataset.key!==me.fbKey){fb.innerHTML=html;fb.dataset.key=me.fbKey;}
+  }else{fb.innerHTML="";fb.dataset.key="";}
+  show("#nextRow",!!me.waitNext);
+  if(me.waitNext){show("#retryBtn",me.fb&&me.fb.kind!=="correct"&&micOK);const nb=$("#nextBtn");nb.textContent=me.i+1>=me.qs.length?"See my results 🎉":"Next question ▶";}
+}
+function resultsView(){
+  const s=lastSession;if(!s)return homeView();
+  const pct=s.scored?Math.round(s.correct/s.scored*100):0;
+  const newB=(s.newBadges||[]).map(id=>BADGES.find(b=>b.id===id)).filter(Boolean);
+  return `<main class="wrap"><section class="card" style="text-align:center">
+  <div class="mascot" style="margin:0 auto">${robot()}</div>
+  <h1>🎉 Quiz complete!</h1>
+  <p>${esc(s.message)}</p>
+  <div class="grid c3" style="margin-top:12px">
+  <div class="stat"><b>${s.points}</b>points</div><div class="stat"><b>${s.correct} / ${s.scored}</b>correct</div><div class="stat"><b>${pct}%</b>accuracy</div></div>
+  ${newB.length?`<h2 style="margin-top:18px">New badges!</h2><div class="badges">${newB.map(b=>`<div class="badge on"><div class="em">${b.em}</div><b>${b.name}</b></div>`).join("")}</div>`:""}
+  <div class="row center" style="margin-top:20px">
+  <button class="btn mint" data-act="again">🔄 Try Again</button>
+  <button class="btn yellow" data-act="review">📝 Review Mistakes</button>
+  <button class="btn purple" data-act="home">🎚 Change Difficulty</button>
+  <button class="btn ghost" data-act="home">🏠 Return Home</button></div>
+  </section></main>`;
+}
+function reviewView(){
+  const s=lastSession;if(!s)return homeView();
+  const miss=Object.keys(stats.missed).length;
+  return `<main class="wrap"><h1>Review</h1>
+  <div class="row"><button class="btn ghost sm" data-act="results">⬅ Back to results</button>
+  <button class="btn yellow sm" data-act="start" data-v="mistakes" ${miss?"":"disabled"}>🔁 Practice My Mistakes</button></div>
+  ${s.answers.map((a,i)=>`<div class="item ${a.res==="correct"?"ok":(a.unscored?"":"bad")}">
+  <div class="row"><b>${a.res==="correct"?"✓ Correct":(a.unscored?"⏱ Not scored":"✗ Not yet")}</b><span class="chip lv-${a.level}">${esc(LEVELS[a.level].name)}</span><span class="chip">${esc(topicName(a.t))}</span></div>
+  <h3>${i+1}. ${esc(a.q)}</h3>
+  <p><b>You said:</b> ${a.said?esc(a.said)+(a.src==="typed"?" (typed)":""):"(no answer)"}</p>
+  <p><b>Correct answer:</b> ${esc(a.a)}</p>
+  <p class="small"><b>Explanation:</b> ${esc(a.a)}</p>
+  ${a.res!=="correct"?`<button class="btn sm mint" data-act="replay-item" data-v="${i}">🔁 Replay question</button>`:""}
+  </div>`).join("")}
+  <div class="row"><button class="btn ghost" data-act="home">🏠 Return Home</button></div></main>`;
+}
+function topicStatRows(){
+  return Object.keys(stats.topics).map(t=>({t,c:stats.topics[t].c,n:stats.topics[t].t,p:stats.topics[t].c/Math.max(1,stats.topics[t].t)})).filter(r=>r.n>0).sort((a,b)=>a.p-b.p);
+}
+function progressView(){
+  const tot=stats.sessions.reduce((a,s)=>({c:a.c+s.correct,n:a.n+s.scored,p:a.p+s.points}),{c:0,n:0,p:0});
+  return `<main class="wrap"><h1>Progress and Badges</h1>
+  <div class="grid c3"><div class="stat"><b>${stats.sessions.length}</b>quizzes finished</div><div class="stat"><b>${tot.p}</b>total points</div><div class="stat"><b>${tot.n?Math.round(tot.c/tot.n*100):0}%</b>overall accuracy</div></div>
+  <h2 style="margin-top:20px">Badges</h2><div class="badges">${BADGES.map(b=>`<div class="badge ${stats.badges[b.id]?"on":"off"}"><div class="em">${b.em}</div><b>${b.name}</b><div class="small">${stats.badges[b.id]?"✓ Earned":b.desc}</div></div>`).join("")}</div>
+  <h2 style="margin-top:20px">Topics</h2><div class="card">${topicStatRows().length?topicStatRows().slice().reverse().map(r=>`<div style="margin:8px 0"><div class="row" style="justify-content:space-between"><span>${esc(topicName(r.t))}</span><b>${Math.round(r.p*100)}% (${r.c}/${r.n})</b></div><div class="tbar"><i style="width:${Math.round(r.p*100)}%"></i></div></div>`).join(""):"<p>Finish a quiz to see your topics here.</p>"}</div>
+  <div class="row"><button class="btn ghost" data-act="home">⬅ Back home</button></div></main>`;
+}
+function soundView(){
+  return `<main class="wrap"><h1>Sound Settings</h1><div class="card">
+  <div class="switch"><input type="checkbox" id="s-mute" data-act="set" data-k="mute" ${settings.mute?"checked":""}><label for="s-mute" style="margin:0">Mute everything (the host stays quiet and questions show on screen)</label></div>
+  <div class="switch"><input type="checkbox" id="s-sfx" data-act="set" data-k="sfx" ${settings.sfx?"checked":""}><label for="s-sfx" style="margin:0">Play sound effects</label></div>
+  <label for="s-vol">Volume: <span id="vVal">${Math.round(settings.volume*100)}%</span></label><input type="range" id="s-vol" min="0" max="1" step="0.05" value="${settings.volume}" data-act="set" data-k="volume">
+  <label for="s-rate">Voice speed: <span id="rVal">${settings.rate.toFixed(2)}×</span></label><input type="range" id="s-rate" min="0.6" max="1.4" step="0.05" value="${settings.rate}" data-act="set" data-k="rate">
+  <div class="row" style="margin-top:12px"><button class="btn mint" data-act="test-voice">🔊 Test the voice</button><button class="btn ghost" data-act="home">⬅ Back home</button></div>
+  </div></main>`;
+}
+function parentView(){
+  const wk=topicStatRows().slice(0,5);const missedIds=Object.keys(stats.missed);
+  const byId=Object.fromEntries(allQuestions().map(q=>[q.id,q]));
+  const counts={easy:0,hard:0,advanced:0};allQuestions().forEach(q=>counts[q.level]++);
+  return `<main class="wrap"><h1>Parent and Teacher</h1>
+  <p class="small">Everything here stays on this device. No account is needed. The question bank has ${ALL.length} built-in questions (${EASY.length} Easy, ${HARD.length} Hard, ${ADV.length} Advanced)${custom.length?" plus "+custom.length+" of your own":""}.</p>
+  <section class="card"><h2>Quiz settings</h2><div class="grid c2">
+  <div><label for="p-lv">Default level</label><select id="p-lv" data-act="set" data-k="level"><option value="easy">Easy: Little Scientist</option><option value="hard">Hard: Science Explorer</option><option value="advanced">Advanced: Science Genius</option><option value="all">All rounds</option></select></div>
+  <div><label for="p-n">Number of questions</label><select id="p-n" data-act="set" data-k="numQ">${[5,10,15,20,30].map(n=>`<option value="${n}">${n}</option>`).join("")}</select></div>
+  <div><label for="p-f">Topic selection (quarter, chapter, or topic)</label><select id="p-f" data-act="filter">${filterOptions(settings.filter)}</select></div>
+  <div><div class="switch"><input type="checkbox" id="p-tc" data-act="set" data-k="timerComp" ${settings.timerComp?"checked":""}><label for="p-tc" style="margin:0">Timers in Competition and Voice-Only</label></div>
+  <div class="switch"><input type="checkbox" id="p-tp" data-act="set" data-k="timerPractice" ${settings.timerPractice?"checked":""}><label for="p-tp" style="margin:0">Timers in Practice</label></div>
+  <div class="switch"><input type="checkbox" id="p-al" data-act="set" data-k="autoListen" ${settings.autoListen?"checked":""}><label for="p-al" style="margin:0">Listen automatically after each question</label></div></div>
+  <div><label for="p-rate">Voice speed: <span id="rVal">${settings.rate.toFixed(2)}×</span></label><input type="range" id="p-rate" min="0.6" max="1.4" step="0.05" value="${settings.rate}" data-act="set" data-k="rate"></div>
+  <div><label for="p-vol">Sound volume: <span id="vVal">${Math.round(settings.volume*100)}%</span></label><input type="range" id="p-vol" min="0" max="1" step="0.05" value="${settings.volume}" data-act="set" data-k="volume"></div>
+  </div></section>
+  <section class="card"><h2>Progress</h2>
+  ${stats.sessions.length?`<div style="overflow-x:auto"><table><tr><th>Date</th><th>Student</th><th>Mode</th><th>Level</th><th>Score</th><th>Accuracy</th></tr>${stats.sessions.slice(0,15).map(s=>`<tr><td>${new Date(s.date).toLocaleDateString()}</td><td>${esc(s.name||"")}</td><td>${esc(MODE_NAME[s.mode]||s.mode)}</td><td>${esc(s.level)}</td><td>${s.points} pts (${s.correct}/${s.scored})</td><td>${s.scored?Math.round(s.correct/s.scored*100):0}%</td></tr>`).join("")}</table></div>`:"<p>No quizzes finished yet.</p>"}
+  <h3 style="margin-top:14px">Weak topics</h3>
+  ${wk.length?wk.map(r=>`<div class="row" style="justify-content:space-between"><span>${esc(topicName(r.t))}</span><b>${Math.round(r.p*100)}% (${r.c}/${r.n})</b></div>`).join(""):"<p class=\"small\">Not enough data yet.</p>"}
+  <h3 style="margin-top:14px">Questions to revisit (${missedIds.length})</h3>
+  ${missedIds.length?missedIds.slice(0,30).map(id=>byId[id]?`<div class="item bad"><b>${esc(byId[id].q)}</b><div class="small">Answer: ${esc(byId[id].a)} · ${esc(topicName(byId[id].t))}</div></div>`:"").join(""):"<p class=\"small\">None right now.</p>"}
+  </section>
+  <section class="card"><h2>Add your own question</h2>
+  <label for="c-q">Question</label><input type="text" id="c-q" maxlength="300">
+  <label for="c-k">Accepted answers (separate with commas; any one is accepted)</label><input type="text" id="c-k" maxlength="200" placeholder="for example: heart, the heart">
+  <label for="c-a">Answer to read aloud when the student misses it</label><input type="text" id="c-a" maxlength="200">
+  <div class="grid c2"><div><label for="c-l">Difficulty</label><select id="c-l"><option value="easy">Easy</option><option value="hard">Hard</option><option value="advanced">Advanced</option></select></div>
+  <div><label for="c-t">Topic</label><select id="c-t">${Object.keys(TOPICS).map(t=>`<option value="${t}">${TOPICS[t].n}</option>`).join("")}</select></div></div>
+  <div class="row" style="margin-top:10px"><button class="btn mint" data-act="add-custom">➕ Add question</button><span id="c-msg" class="small" role="status"></span></div>
+  ${custom.length?`<h3 style="margin-top:14px">Your questions</h3>${custom.map((c,i)=>`<div class="item"><b>${esc(c.q)}</b><div class="small">Accepts: ${esc(c.accept)} · ${esc(c.level)} · ${esc(topicName(c.t))}</div><button class="btn sm ghost" data-act="del-custom" data-v="${i}">Delete</button></div>`).join("")}`:""}
+  </section>
+  <section class="card"><h2>Privacy</h2><p>This app never records or saves audio. Quiz scores, settings, and missed questions are stored only in this browser. Chrome and Edge may send what you say to an online speech service to turn it into text; other browsers may not support voice at all.</p>
+  <button class="btn coral sm" data-act="reset" id="resetBtn">Erase all progress</button></section>
+  <div class="row"><button class="btn ghost" data-act="home">⬅ Back home</button></div></main>`;
+}
+function syncParentSelects(){
+  const set=(id,v)=>{const e=$(id);if(e)e.value=String(v);};
+  set("#p-lv",settings.level);set("#p-n",settings.numQ);
+}
+
+/* ===================== Quiz engine ===================== */
+function buildQuestions(mode,level,n){
+  let pool=allQuestions();
+  if(mode==="mistakes"){pool=pool.filter(q=>stats.missed[q.id]);return shuffle(pool).slice(0,n);}
+  pool=pool.filter(q=>inFilter(q,settings.filter));
+  if(level==="all"){
+    const per=Math.ceil(n/3);let out=[];
+    for(const lv of ["easy","hard","advanced"])out=out.concat(shuffle(pool.filter(q=>q.level===lv)).slice(0,per));
+    return out;
+  }
+  return shuffle(pool.filter(q=>q.level===level)).slice(0,n);
+}
+function startQuiz(mode){
+  if(!settings.name.trim())settings.name="Scientist";
+  const qs=buildQuestions(mode,settings.level,settings.numQ);
+  if(!qs.length){toastMsg=mode==="mistakes"?"You have no missed questions to practice yet. Play a quiz first!":"No questions match that level and topic. Try “All topics” or a different level.";go("home");return;}
+  cleanup();
+  quiz={mode,level:settings.level,qs,i:-1,score:0,correct:0,wrong:0,answers:[],state:"IDLE",dead:false,timeouts:[],
+    micOn:false,micStatus:micOK?"idle":"unsupported",typed:!micOK,micMsg:micOK?"":micErrorText("unsupported"),lastLevel:null,heard:"",interim:"",hostText:"",q:null,fb:null,unsure:0,trouble:false,
+    timed:false,names:null};
+  view="quiz";render();askQuestion();
+}
+const alive=me=>quiz===me&&!me.dead;
+function wait(me,ms){return new Promise(r=>{const id=setTimeout(r,ms);me.timeouts.push(id);});}
+function setState(s){if(quiz){quiz.state=s;live(STATE_LABEL[s]||"");}}
+async function askQuestion(){
+  const me=quiz;if(!alive(me))return;
+  me.i++;
+  if(me.i>=me.qs.length){finish();return;}
+  const q=me.qs[me.i];me.q=q;
+  Object.assign(me,{heard:"",interim:"",fb:null,fbKey:"",waitNext:false,retrying:false,partialUsed:false,unsure:0,trouble:false,micOn:false,typed:me.typed&&me.micStatus!=="idle"&&me.micStatus!=="ok"?true:!micOK,hostText:""});
+  const L=LEVELS[q.level];
+  me.timed=(me.mode==="practice"||me.mode==="mistakes")?settings.timerPractice:settings.timerComp;
+  me.timeTotal=L.secs*1000;me.timeLeft=me.timeTotal;
+  Timer.clear();
+  setState("SPEAKING");
+  let intro="";
+  if(me.i===0)intro+="Hello "+settings.name+"! Welcome to Science Wonder Quiz Bee! ";
+  if(q.level!==me.lastLevel){intro+=L.name+" round: "+L.title+"! ";me.lastLevel=q.level;}
+  const text=intro+"Question number "+ordWord(me.i+1)+"! "+speakable(q.q);
+  me.hostText="Question "+(me.i+1)+"! "+speakable(q.q);
+  ui();
+  await speak(text);if(!alive(me))return;
+  await wait(me,450);if(!alive(me))return;
+  beginAnswering(me,true);
+}
+function beginAnswering(me,fresh){
+  if(!alive(me))return;
+  if(fresh&&me.timed){
+    Timer.start(me.timeTotal,()=>ui(),()=>timeUp(me));
+  }else if(me.timed){Timer.resume();}
+  startListen(me);
+}
+function startListen(me){
+  if(!alive(me))return;
+  setState("LISTENING");me.interim="";
+  if(!micOK||me.micStatus==="denied"||me.micStatus==="nomic"||me.micStatus==="network"){me.micOn=false;me.typed=true;ui();return;}
+  if(!settings.autoListen&&!me.userTapped){me.micOn=false;ui();return;}
+  me.micOn=true;me.emptyRounds=me.emptyRounds||0;ui();
+  Mic.start({
+    interim:t=>{if(alive(me)&&me.state==="LISTENING"){me.interim=t;ui();}},
+    final:alts=>{if(alive(me)&&me.state==="LISTENING")onHeard(me,alts);},
+    error:code=>{
+      if(!alive(me))return;
+      if(code==="no-speech"||code==="aborted")return;
+      me.micOn=false;me.typed=true;
+      if(code==="not-allowed"||code==="service-not-allowed")me.micStatus="denied";
+      else if(code==="audio-capture")me.micStatus="nomic";
+      else if(code==="network"||code==="unsupported"||code==="language-not-supported")me.micStatus="network";
+      me.micMsg=micErrorText(code);ui();
+    },
+    end:(got,err)=>{
+      if(!alive(me)||me.state!=="LISTENING"||got||!me.micOn)return;
+      if(err&&err!=="no-speech"&&err!=="aborted")return;
+      me.emptyRounds++;
+      if(!me.timed&&me.emptyRounds>=4){me.micOn=false;me.emptyRounds=0;ui();return;}
+      wait(me,250).then(()=>{if(alive(me)&&me.state==="LISTENING"&&me.micOn)startListen(me);});
+    }
+  });
+  me.micStatus=me.micStatus==="idle"?"ok":me.micStatus;
+}
+function stopListening(me){Mic.stop();if(me)me.micOn=false;}
+function onHeard(me,alts){
+  stopListening(me);me.heard=alts[0];me.interim="";me.emptyRounds=0;
+  const cmd=parseCommand(alts[0]);
+  if(cmd){runCommand(me,cmd);return;}
+  submit(me,alts,"voice");
+}
+function submit(me,alts,src){
+  if(!alive(me)||me.state==="FEEDBACK"||me.state==="PROCESSING")return;
+  stopListening(me);Timer.pause();
+  me.heard=alts[0];me.src=src;setState("PROCESSING");ui();
+  const q=me.q;let res=judge(q,alts);
+  if(me.retrying){feedback(me,res==="correct"?"correct":"wrong");return;}
+  if(res==="idk"&&me.mode==="competition")res="wrong";
+  if(res==="unsure"||res==="idk"){reprompt(me,res);return;}
+  if(res==="partial"&&(me.mode==="practice"||me.mode==="mistakes")&&!me.partialUsed){me.partialUsed=true;reprompt(me,"partial");return;}
+  feedback(me,res==="correct"?"correct":"wrong");
+}
+async function reprompt(me,kind){
+  let msg;
+  if(kind==="partial")msg="You’re on the right track! Can you say the whole answer?";
+  else if(kind==="idk")msg="That’s okay! Say hint for a clue, or try your best guess!";
+  else{me.unsure++;me.trouble=true;msg=me.unsure>=2?"I’m having trouble hearing you. Tap the microphone, or type your answer.":"Hmm, I didn’t catch that. Please say your answer again!";if(me.unsure>=2)me.typed=true;}
+  me.hostText=msg;me.heard=kind==="unsure"?"":me.heard;setState("SPEAKING");ui();
+  await speak(msg);if(!alive(me))return;
+  await wait(me,300);if(!alive(me))return;
+  me.heard="";me.userTapped=true;beginAnswering(me,false);
+}
+async function runCommand(me,cmd){
+  Timer.pause();setState("PROCESSING");ui();
+  const prac=me.mode==="practice"||me.mode==="mistakes";
+  if(cmd==="repeat"){await replay(me);return;}
+  if(cmd==="score"){
+    const n=me.answers.filter(a=>!a.unscored).length;
+    const msg="You have "+me.score+" point"+(me.score===1?"":"s")+". You got "+me.correct+" of "+n+" questions right so far.";
+    me.hostText=msg;setState("SPEAKING");ui();await speak(msg);if(!alive(me))return;await wait(me,300);if(!alive(me))return;me.heard="";beginAnswering(me,false);return;
+  }
+  if(cmd==="hint"){if(prac){await giveHint(me);}else{me.hostText="No hints in the competition!";setState("SPEAKING");ui();await speak(me.hostText);if(!alive(me))return;me.heard="";beginAnswering(me,false);}return;}
+  if(cmd==="stop"){me.heard="";endEarly(me);return;}
+  if(cmd==="next"||cmd==="skip"){skip(me);return;}
+}
+async function replay(me){
+  if(!alive(me))return;
+  stopListening(me);Timer.pause();setState("SPEAKING");me.heard="";me.hostText=speakable(me.q.q);ui();
+  await speak(me.q.q);if(!alive(me))return;
+  await wait(me,350);if(!alive(me))return;
+  me.userTapped=true;beginAnswering(me,false);
+}
+function hintFor(q){
+  const w=q.a.replace(/[^A-Za-z0-9 ]/g," ").trim().split(/\s+/);
+  if(w.length<=3&&/[A-Za-z]/.test(w[0]))return "Here’s a hint. The answer starts with the letter "+w[0][0].toUpperCase()+".";
+  if(/^\d/.test(q.a))return "Here’s a hint. Look closely at the numbers in the problem and do the math step by step.";
+  return "Here’s a hint. Think about "+topicName(q.t)+".";
+}
+async function giveHint(me){
+  stopListening(me);Timer.pause();setState("SPEAKING");const h=hintFor(me.q);me.hostText=h;me.heard="";ui();
+  await speak(h);if(!alive(me))return;await wait(me,300);if(!alive(me))return;me.userTapped=true;beginAnswering(me,false);
+}
+function skip(me){
+  if(!alive(me))return;stopListening(me);Timer.pause();me.heard=me.heard||"";feedback(me,"skipped");
+}
+function timeUp(me){
+  if(!alive(me)||me.state==="FEEDBACK")return;
+  stopListening(me);cancelSpeech();feedback(me,"timeout");
+}
+async function feedback(me,kind){
+  if(!alive(me))return;
+  stopListening(me);Timer.clear();
+  const q=me.q,L=LEVELS[q.level];
+  const ok=kind==="correct";
+  const unscored=kind==="timeout"&&(me.trouble||me.micStatus==="denied"||me.micStatus==="nomic");
+  setState("FEEDBACK");
+  let spoken,msg="";
+  if(ok){
+    if(!me.retrying){me.score+=L.pts;me.correct++;}
+    const long=q.a.split(/\s+/).length>5;
+    msg=me.retrying?" Nice job trying again!":" You earned "+L.pts+" point"+(L.pts>1?"s":"")+"!";
+    spoken=praise()+" "+(me.retrying?"That’s it!":(q.a.split(/\s+/).length<=4?q.a.replace(/\.$/,"")+" is correct! ":"")+"You earned "+L.pts+" point"+(L.pts>1?"s":"")+"!")+((me.mode==="practice"||me.mode==="mistakes")&&long?" Here’s the explanation: "+q.a:"");
+    sfx.ok();
+  }else if(kind==="timeout"){
+    spoken="Time is up! Let’s find out the correct answer. "+q.a;sfx.bad();
+  }else if(kind==="skipped"){
+    spoken="Okay, let’s skip that one! The correct answer is "+q.a;
+  }else{
+    spoken=tryAgain()+" The correct answer is "+q.a+((me.mode==="practice"||me.mode==="mistakes")?" Want to try again?":"");sfx.bad();
+  }
+  if(!me.retrying){
+    if(!ok&&!unscored)me.wrong++;
+    me.answers.push({id:q.id,q:q.q,a:q.a,t:q.t,level:q.level,said:me.heard||"",src:me.src||"voice",res:kind,unscored});
+  }
+  me.fb={kind,msg};me.fbKey=me.i+":"+kind+":"+(me.retrying?"r":"f")+":"+Date.now();me.hostText=ok?spoken:spoken;
+  const prac=me.mode==="practice"||me.mode==="mistakes";
+  me.waitNext=prac;
+  live((ok?"Correct. ":"Not quite. ")+"The answer is "+q.a);
+  ui();
+  await speak(spoken);if(!alive(me))return;
+  if(prac){me.hostText="Press Next question when you’re ready.";ui();return;}
+  await wait(me,ok?600:900);if(!alive(me))return;
+  askQuestion();
+}
+function retryQuestion(){
+  const me=quiz;if(!me||!me.waitNext)return;
+  me.retrying=true;me.waitNext=false;me.fb=null;me.fbKey="";me.heard="";me.userTapped=true;
+  me.hostText="Try again! "+speakable(me.q.q);setState("LISTENING");ui();
+  beginAnswering(me,false);
+}
+function endEarly(me){
+  if(!alive(me))return;
+  cancelSpeech();Timer.clear();stopListening(me);
+  if(!me.answers.length){go("home");return;}
+  finish(true);
+}
+function finish(early){
+  const me=quiz;if(!me)return;
+  Timer.clear();Mic.stop();cancelSpeech();
+  const scored=me.answers.filter(a=>!a.unscored);
+  const correct=scored.filter(a=>a.res==="correct").length;
+  const pct=scored.length?correct/scored.length:0;
+  const name=settings.name;
+  let tail=pct>=.9?" You are a true Science Champion!":pct>=.7?" Great job, scientist!":pct>=.4?" Nice work! Keep practicing and you will be a champion.":" Every scientist learns by trying. Let’s practice the ones you missed!";
+  const message=(early?"You stopped early, "+name+". ":"Congratulations "+name+"! You completed the Science Quiz Bee and ")+(early?"You answered ":"answered ")+correct+" out of "+scored.length+" question"+(scored.length===1?"":"s")+" correctly!"+tail;
+  const session={date:Date.now(),name,mode:me.mode,level:me.level,points:me.score,correct,scored:scored.length,answers:me.answers,message};
+  // stats
+  scored.forEach(a=>{
+    const t=stats.topics[a.t]||(stats.topics[a.t]={c:0,t:0});t.t++;if(a.res==="correct")t.c++;
+    if(a.res==="correct")delete stats.missed[a.id];else stats.missed[a.id]=(stats.missed[a.id]||0)+1;
+  });
+  session.newBadges=awardBadges(session);
+  const keep=Object.assign({},session,{answers:session.answers.map(a=>({id:a.id,t:a.t,level:a.level,res:a.res,said:a.said}))});
+  stats.sessions.unshift(keep);stats.sessions=stats.sessions.slice(0,50);saveStats();
+  lastSession=session;
+  quiz.dead=true;quiz=null;view="results";render();window.scrollTo(0,0);
+  sfx.win();
+  speak(message);
+}
+
+/* ===================== Confetti ===================== */
+let confettiRAF=null;
+function startConfetti(){
+  const c=$("#confetti");if(!c)return;
+  if(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)return;
+  const ctx=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;
+  const cols=["#3b6cf6","#7c4dff","#27d3a2","#ffc533","#e8532f"];
+  const ps=Array.from({length:140},()=>({x:Math.random()*c.width,y:-20-Math.random()*c.height*.6,r:4+Math.random()*6,c:cols[rnd(cols.length)],vy:2+Math.random()*3.5,vx:-1.5+Math.random()*3,rot:Math.random()*6}));
+  const end=Date.now()+3500;cancelAnimationFrame(confettiRAF);
+  (function f(){
+    ctx.clearRect(0,0,c.width,c.height);
+    ps.forEach(p=>{p.y+=p.vy;p.x+=p.vx;p.rot+=.1;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.fillStyle=p.c;ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);ctx.restore();});
+    if(Date.now()<end&&view==="results")confettiRAF=requestAnimationFrame(f);else ctx.clearRect(0,0,c.width,c.height);
+  })();
+}
+
+/* ===================== Microphone test ===================== */
+function mtRefresh(){if(view==="mictest"){app.innerHTML=micTestView();}}
+function micTestStart(){
+  mtState.error=null;mtState.ok=false;mtState.heard="";mtState.listening=true;mtState.status="Listening… say “hello science”.";
+  cancelSpeech();mtRefresh();
+  Mic.start({
+    interim:t=>{mtState.heard=t;const e=$("#mtHeard");if(e)e.textContent="I heard: “"+t+"”";},
+    final:alts=>{Mic.stop();mtState.listening=false;mtState.heard=alts[0];mtState.ok=true;mtState.status="Great! I heard you.";micTestedThisVisit=true;mtRefresh();speak("I heard you say "+alts[0]);},
+    error:code=>{if(code==="no-speech"||code==="aborted")return;Mic.stop();mtState.listening=false;mtState.error=code;mtState.status="";mtRefresh();},
+    end:(got,err)=>{if(!got&&!err&&mtState.listening){mtState.listening=false;mtState.status="I didn’t hear anything. Press the button and try again.";mtRefresh();}}
+  });
+}
+
+/* ===================== Events ===================== */
+app.addEventListener("click",e=>{
+  const b=e.target.closest("[data-act]");if(!b||b.tagName==="SELECT"||b.type==="range"||b.type==="checkbox")return;
+  act(b.dataset.act,b);
+});
+app.addEventListener("change",e=>{
+  const b=e.target.closest("[data-act]");if(!b)return;
+  if(b.dataset.act==="filter"){settings.filter=b.value;saveSettings();return;}
+  if(b.dataset.act==="set"){
+    const k=b.dataset.k;let v=b.type==="checkbox"?b.checked:b.type==="range"?parseFloat(b.value):(["numQ"].includes(k)?parseInt(b.value,10):b.value);
+    settings[k]=v;saveSettings();
+  }
+});
+app.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.id==="nm"){settings.name=t.value.trim().slice(0,20);saveSettings();}
+  if(t.dataset&&t.dataset.act==="set"&&t.type==="range"){
+    const k=t.dataset.k;settings[k]=parseFloat(t.value);saveSettings();
+    const vv=$("#vVal"),rv=$("#rVal");if(vv)vv.textContent=Math.round(settings.volume*100)+"%";if(rv)rv.textContent=settings.rate.toFixed(2)+"×";
+  }
+});
+app.addEventListener("keydown",e=>{
+  if(e.key==="Enter"&&e.target.id==="typeIn"){e.preventDefault();typedSubmit();}
+});
+function typedSubmit(){
+  const me=quiz;if(!me)return;const el=$("#typeIn");const v=el?el.value.trim():"";if(!v)return;
+  if(me.state!=="LISTENING")return;
+  el.value="";const cmd=parseCommand(v);
+  if(cmd&&cmd!=="hint"){runCommand(me,cmd);return;}
+  submit(me,[v],"typed");
+}
+function act(a,b){
+  const me=quiz;
+  switch(a){
+    case"home":go("home");break;
+    case"level":settings.level=b.dataset.v;saveSettings();render();break;
+    case"hello":speak("Welcome to Science Wonder Quiz Bee! Are you ready to become a Science Champion?");{const m=$("#homeMascot");if(m)m.className="mascot speaking";setTimeout(()=>{const x=$("#homeMascot");if(x)x.className="mascot";},3500);}break;
+    case"start":{
+      const mode=b.dataset.v;
+      if(micOK&&settings.autoListen&&!micTestedThisVisit&&mode!=="practice"&&view!=="review"){pendingStart=mode;go("mictest");break;}
+      startQuiz(mode);break;}
+    case"mictest":pendingStart=null;go("mictest");break;
+    case"mt-voice":speak("Hello! I am your science quiz host. Can you hear me?");break;
+    case"mt-mic":if(mtState.listening){Mic.stop();mtState.listening=false;mtState.status="Stopped.";mtRefresh();}else micTestStart();break;
+    case"mt-go":{const m=pendingStart;pendingStart=null;micTestedThisVisit=true;Mic.stop();startQuiz(m);break;}
+    case"progress":go("progress");break;
+    case"sound":go("sound");break;
+    case"parent":go("parent");syncParentSelects();break;
+    case"test-voice":speak("Hi! I am your science quiz host. This is how I sound.");break;
+    case"results":go("results");break;
+    case"review":go("review");break;
+    case"again":startQuiz(lastSession?lastSession.mode:"practice");break;
+    case"replay-item":{const it=lastSession.answers[+b.dataset.v];speak(it.q+" The correct answer is "+it.a);break;}
+    case"add-custom":{
+      const q=$("#c-q").value.trim(),k=$("#c-k").value.trim(),ans=$("#c-a").value.trim()||$("#c-k").value.split(",")[0].trim();
+      const msg=$("#c-msg");
+      if(!q||!k){msg.textContent="Please fill in the question and at least one accepted answer.";break;}
+      const alts=k.split(",").map(s=>s.trim()).filter(Boolean);
+      custom.push({id:"c"+Date.now(),level:$("#c-l").value,t:$("#c-t").value,q,a:ans,accept:alts.join(", "),k:[alts.map(s=>s.replace(/\|/g," "))],custom:true});
+      store.set("custom",custom);go("parent");syncParentSelects();break;}
+    case"del-custom":custom.splice(+b.dataset.v,1);store.set("custom",custom);go("parent");syncParentSelects();break;
+    case"reset":
+      if(b.dataset.armed){stats={sessions:[],missed:{},topics:{},badges:{}};saveStats();go("parent");syncParentSelects();}
+      else{b.dataset.armed="1";b.textContent="Tap again to erase everything";setTimeout(()=>{if(b&&b.isConnected){delete b.dataset.armed;b.textContent="Erase all progress";}},4000);}
+      break;
+    /* quiz */
+    case"q-exit":
+      if(b.dataset.armed){go("home");}
+      else{b.dataset.armed="1";b.textContent="Tap again to exit";setTimeout(()=>{if(b&&b.isConnected){delete b.dataset.armed;b.textContent="✕ Exit";}},3000);}
+      break;
+    case"q-mute":settings.mute=!settings.mute;saveSettings();if(settings.mute)cancelSpeech();ui();break;
+    case"q-mic":
+      if(!me||me.state!=="LISTENING")break;
+      if(me.micOn){stopListening(me);ui();}
+      else{me.userTapped=true;me.micMsg="";if(me.micStatus==="denied"||me.micStatus==="nomic"||me.micStatus==="network")me.micStatus="idle";sfx.mic();startListen(me);}
+      break;
+    case"q-replay":if(me&&!me.fb)replay(me);break;
+    case"q-hint":if(me&&me.state==="LISTENING")giveHint(me);break;
+    case"q-skip":if(me&&me.state!=="FEEDBACK"&&me.state!=="PROCESSING")skip(me);break;
+    case"q-type":if(me){me.typed=!me.typed;ui();if(me.typed){const i=$("#typeIn");if(i)i.focus();}}break;
+    case"q-submit":typedSubmit();break;
+    case"q-next":if(me&&me.waitNext){cancelSpeech();askQuestion();}break;
+    case"q-retry":retryQuestion();break;
+  }
+}
+/* keep the timer ring and mic UI fresh */
+addEventListener("pagehide",cleanup);
+document.addEventListener("visibilitychange",()=>{if(document.hidden&&quiz&&quiz.state==="LISTENING"){/* browsers stop mic in background; user can tap again */}});
+render();
+</script>
+</body>
+</html>
