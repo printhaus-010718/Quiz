@@ -859,16 +859,27 @@ function syncParentSelects(){
 }
 
 /* ===================== Quiz engine ===================== */
+function pickFresh(list,n){
+  const seen=store.get("seen",{});
+  let pick=shuffle(list.filter(q=>!seen[q.id])).slice(0,n);
+  if(pick.length<n){
+    list.forEach(q=>{delete seen[q.id];});
+    pick=pick.concat(shuffle(list.filter(q=>pick.indexOf(q)<0)).slice(0,n-pick.length));
+  }
+  pick.forEach(q=>{seen[q.id]=1;});
+  store.set("seen",seen);
+  return shuffle(pick);
+}
 function buildQuestions(mode,level,n){
   let pool=allQuestions();
   if(mode==="mistakes"){pool=pool.filter(q=>stats.missed[q.id]);return shuffle(pool).slice(0,n);}
   pool=pool.filter(q=>inFilter(q,settings.filter));
   if(level==="all"){
     const per=Math.ceil(n/3);let out=[];
-    for(const lv of ["easy","hard","advanced"])out=out.concat(shuffle(pool.filter(q=>q.level===lv)).slice(0,per));
+    for(const lv of ["easy","hard","advanced"])out=out.concat(pickFresh(pool.filter(q=>q.level===lv),per));
     return out;
   }
-  return shuffle(pool.filter(q=>q.level===level)).slice(0,n);
+  return pickFresh(pool.filter(q=>q.level===level),n);
 }
 function startQuiz(mode){
   if(!settings.name.trim())settings.name="Scientist";
